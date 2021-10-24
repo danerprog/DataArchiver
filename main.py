@@ -1,0 +1,52 @@
+from environment.Environment import Environment
+from downloadrequest.DownloadRequestArchiver import DownloadRequestArchiver
+from archivers.YoutubeArchiver import YoutubeArchiver
+
+import getopt
+import sys
+
+def display_menu() :
+    print("################## Data Archiver - Alpha v0.1.0 #################")
+    print("Automatically archives and manages your scraped data")
+    print()
+    print("########################### Archivers ###########################")
+    print("YoutubeArchiver: Archive batches of youtube videos. Usage --youtube_archiver <download_request_file>")
+    
+    print()
+    print()
+
+def run(config_file) :
+    Environment.setEnvironment({
+        "config_file" : config_file
+    })
+    youtube_archiver = YoutubeArchiver({
+        "successful_download_request_archiver" : DownloadRequestArchiver("successful_downloads"),
+        "failed_download_request_archiver" : DownloadRequestArchiver("failed_downloads")
+    })
+
+    while True:
+        display_menu()
+        command = input("Command: ")
+        options, arguments = getopt.getopt(command.split(),"",["youtube_archiver=","quit"])
+        option, value = options[0]
+        
+        if option == "--youtube_archiver" :
+            youtube_archiver.download(value)
+        elif option == "--quit" :
+            break
+
+if __name__ == "__main__" :
+    config_file = "config.json"
+    
+    options, arguments = getopt.getopt((sys.argv[1:]),"",["config=","help"])
+    
+    for option, value in options:
+        if option == "--help" :
+            print("Usage: <executable_name> [--config config_file]")
+            print("If config file is not provided, the default 'config.json' will be used")
+            sys.exit()
+        elif option == "--config" :
+            config_file = value
+
+    run(config_file)
+        
