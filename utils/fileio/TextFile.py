@@ -1,5 +1,7 @@
 from utils.fileio.File import File
 
+import os
+
 class TextFile(File):
 
     def __init__(self, filename, mode="r+"):
@@ -13,3 +15,7 @@ class TextFile(File):
         
     def readLine(self):
         return self.file().readline()
+        
+    def flush(self):
+        self.file().flush()
+        os.fsync(self.file())
