@@ -1,5 +1,6 @@
 from environment.Environment import Environment
 from downloadrequest.DownloadRequestArchiver import DownloadRequestArchiver
+from downloadrequest.DownloadRequestArchiver import FailedDownloadRequestArchiver
 from archivers.YoutubeArchiver import YoutubeArchiver
 
 import getopt
@@ -21,7 +22,7 @@ def run(config_file) :
     })
     youtube_archiver = YoutubeArchiver({
         "successful_download_request_archiver" : DownloadRequestArchiver("successful_downloads"),
-        "failed_download_request_archiver" : DownloadRequestArchiver("failed_downloads")
+        "failed_download_request_archiver" : FailedDownloadRequestArchiver("failed_downloads")
     })
 
     while True:
@@ -34,6 +35,8 @@ def run(config_file) :
             
             if option == "--youtube_archiver" :
                 youtube_archiver.download(value)
+                print()
+                print()
             elif option == "--quit" :
                 break
 

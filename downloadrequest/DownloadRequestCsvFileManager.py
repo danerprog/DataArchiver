@@ -81,5 +81,15 @@ class DownloadRequestCsvFileManager(object):
         
     def _writeDownloadRequestKeys(self):
         self._logger.info("Writing download request keys to csv file")
-        self._csv_file.writeLine("url, managed_directory_name, subdirectory")
+        self._csv_file.write("url, managed_directory_name, subdirectory")
+        self._writeAdditionalDownloadRequestKeys()
+        self._csv_file.writeLine("")
+        
+    def _writeAdditionalDownloadRequestKeys(self):
+        pass
+        
+class FailedDownloadRequestCsvFileManager(DownloadRequestCsvFileManager):
+    
+    def _writeAdditionalDownloadRequestKeys(self):
+        self._csv_file.write(", failure_reason")
     
