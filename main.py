@@ -28,12 +28,14 @@ def run(config_file) :
         display_menu()
         command = input("Command: ")
         options, arguments = getopt.getopt(command.split(),"",["youtube_archiver=","quit"])
-        option, value = options[0]
         
-        if option == "--youtube_archiver" :
-            youtube_archiver.download(value)
-        elif option == "--quit" :
-            break
+        if len(options) > 0:
+            option, value = options[0]
+            
+            if option == "--youtube_archiver" :
+                youtube_archiver.download(value)
+            elif option == "--quit" :
+                break
 
 if __name__ == "__main__" :
     config_file = "config.json"
