@@ -53,12 +53,8 @@ class DownloadRequestListProcessor:
             failure_reason = str(e).replace("\n", ". ")
             self._logger.info("DownloadError caught. failure_reason: " + failure_reason)
             self._process_failed_download(failure_reason)
-        except KeyError as e:
-            failure_reason = "KeyError caught. Possible malformed csv entry. "
-            self._logger.info(failure_reason + "self._current_download_request_for_processing: " + str(self._current_download_request_for_processing))
-            self._process_failed_download(failure_reason)
         except UndefinedManagedDirectoryNameException as e:
-            message = str(e)
+            message = "UndefinedManagedDirectoryNameException caught. managed_directory_name: " + str(e)
             self._logger.info(message)
             self._process_failed_download(message)
 
