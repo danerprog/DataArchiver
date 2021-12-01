@@ -68,6 +68,6 @@ class ConfigJsonFileManager(object) :
         if "working_directory" in self._jsondict:
             directory = self._jsondict["working_directory"]
         return directory
-        
+
     
-        
+    

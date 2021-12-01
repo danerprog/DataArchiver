@@ -40,7 +40,10 @@ class Environment(object):
         return root
         
     def getManagedDirectoryPath(self, managed_directory_name):
-        return self._config_json_file_manager.getManagedDirectoryPath(managed_directory_name)
+        try:
+            return self._config_json_file_manager.getManagedDirectoryPath(managed_directory_name)
+        except KeyError as e:
+            raise UndefinedManagedDirectoryNameException(str(e))
         
     def getWorkingDirectory(self):
         directory = self._config_json_file_manager.getWorkingDirectory()
@@ -53,3 +56,9 @@ class Environment(object):
         
     def getEnvironment():
         return Environment.CURRENT_ENVIRONMENT
+        
+
+class UndefinedManagedDirectoryNameException(Exception):
+
+    def __init__(self, message):
+        super().__init__(message)
