@@ -1,18 +1,30 @@
 from downloadrequest.DownloadRequestJsonFileManager import DownloadRequestJsonFileManager
 from downloadrequest.DownloadRequestCsvFileManager import DownloadRequestCsvFileManager
+from utils.Logger import Logger
+
+import os.path
 
 class DownloadRequestBuilder(object) :
     
     def __init__(self, filename) :
+        self._logger = Logger.getLogger("DownloadRequestBuilder - " + filename)
         self._filename = filename
         self._download_request_file_manager = None
         self._download_requests = {}
         
-        self._buildDownloadRequests()
+        self._buildDownloadRequestsIfFileExists()
+        
+    def _buildDownloadRequestsIfFileExists(self):
+        if os.path.isfile(self._filename):
+            self._buildDownloadRequests()
+        else:
+            self._logger.warning("File not found. filename: " + self._filename)
         
     def _buildDownloadRequests(self) :
         self._constructDownloadRequestFileManager()
-        self._fixAndRearrangeDownloadRequestsAccordingToRootDirectory()
+        
+        if self._download_request_file_manager is not None:
+            self._fixAndRearrangeDownloadRequestsAccordingToRootDirectory()
         
     def _constructDownloadRequestFileManager(self):
         file_extension = self._filename.split(sep=".")[-1]
@@ -22,7 +34,8 @@ class DownloadRequestBuilder(object) :
         elif file_extension == "csv" :
             self._download_request_file_manager = DownloadRequestCsvFileManager(self._filename)
         else : 
-            print("ERR: file extension " + file_extension + " is not supported!")
+            message = "WRN: file extension " + file_extension + " is not supported!"
+            self._logger.warning(message)
 
     def _fixAndRearrangeDownloadRequestsAccordingToRootDirectory(self) :
         for download_request in self._download_request_file_manager.getAcceptableDownloadRequests():

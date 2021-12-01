@@ -32,7 +32,7 @@ class YoutubeArchiver(object):
             
     def _process_download_request_array(self, managed_directory_name, download_request_array):
         for download_request in download_request_array:
-            self._process_download_request(managed_directory_name, download_request)
+            self._try_to_process_download_request(managed_directory_name, download_request)
                 
     def _process_download_request(self, managed_directory_name, download_request):
         self._current_download_request = download_request
@@ -44,6 +44,18 @@ class YoutubeArchiver(object):
             self._logger.warning("Path does not exist. Stopping download. full_directory: " + full_directory + ", download_url: " + download_request["url"])
             self._failed_download_request_archiver.archiveDownloadRequest(download_request)
             
+    def _try_to_process_download_request(self, managed_directory_name, download_request):
+        try:
+            self._process_download_request(managed_directory_name, download_request)
+        except youtube_dl.utils.DownloadError as e:
+            failure_reason = str(e).replace("\n", ". ")
+            self._logger.info("DownloadError caught. failure_reason: " + failure_reason)
+            self._process_failed_download(failure_reason)
+        except KeyError as e:
+            failure_reason = "KeyError caught. Possible malformed csv entry. "
+            self._logger.info(failure_reason + "download_request: " + str(download_request))
+            self._process_failed_download(failure_reason)
+
     def _doesPathExist(self, directory):
         return Path(directory).is_dir()
             
@@ -56,19 +68,11 @@ class YoutubeArchiver(object):
             "retries" : 3,
             "progress_hooks": [self._success_hook, self._failed_hook],
         }
-        self._try_to_download_url(download_request["url"], ydl_options)
         
-        
-    def _try_to_download_url(self, download_url, ydl_options):
         self._logger.info("Processing new download request. download_url: " + download_url + "ydl_options: " + str(ydl_options))
-        try:
-            ydl = youtube_dl.YoutubeDL(ydl_options)
-            ydl.download([download_url])
-        except youtube_dl.utils.DownloadError as e:
-            failure_reason = str(e).replace("\n", ". ")
-            self._logger.info("DownloadError caught. failure_reson: " + failure_reason)
-            self._process_failed_download(failure_reason)
-            
+        ydl = youtube_dl.YoutubeDL(ydl_options)
+        ydl.download([download_request["url"]])
+        
     def _process_failed_download(self, failure_reason):
         failed_download_request = self._current_download_request
         failed_download_request["failure_reason"] = failure_reason
