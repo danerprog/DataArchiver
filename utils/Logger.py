@@ -17,9 +17,9 @@ class Logger(object):
     CURRENT_LOGGING_LEVEL = LOGGING_LEVEL["TRACE"]
     DEFAULT_OUTPUT_FILENAME = "log.txt"
 
-    def __init__(self, name, outputFilename = DEFAULT_OUTPUT_FILENAME):
+    def __init__(self, name, outputFilename = None):
         self._loggername = name
-        self._outputFilename = outputFilename
+        self._outputFilename = outputFilename if outputFilename is not None else Logger.DEFAULT_OUTPUT_FILENAME
         self._changeOutputFile()
     
     def _changeOutputFile(self):

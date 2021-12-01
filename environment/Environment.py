@@ -11,16 +11,17 @@ class Environment(object):
     DEFAULT_WORKING_DIRECTORY = ".youtubearchiver"
 
     def __init__(self, config_json_filename):
-        self._logger = Logger.getLogger("Environment")
-        
-        self._logger.info("Setting configuration from file: " + config_json_filename)
         self._config_json_file_manager = ConfigJsonFileManager(config_json_filename)
-        
         self._working_directory = Path(self.getWorkingDirectory())
         self._prepareEnvironment()
         
     def _prepareEnvironment(self) :
+        self._prepareLoggerEnvironment()
         self._createWorkingDirectory()
+        
+    def _prepareLoggerEnvironment(self):
+        Logger.DEFAULT_OUTPUT_FILENAME = self.getWorkingDirectory() + "\\" + Logger.DEFAULT_OUTPUT_FILENAME
+        self._logger = Logger.getLogger("Environment")
       
     def _createWorkingDirectory(self) :
         if not self._working_directory.is_dir():
