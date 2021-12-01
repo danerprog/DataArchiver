@@ -7,18 +7,19 @@ class Logger(object):
     
     LOGGER = {}
     TEXT_FILES = {}
-    LOGGING_LEVEL = {
+    LEVEL = {
         "TRACE" : -1,
         "DEBUG" : 0,
         "INFO" : 1,
         "WARNING" : 2,
         "ERROR" : 3,
     }
-    CURRENT_LOGGING_LEVEL = LOGGING_LEVEL["TRACE"]
+    CURRENT_LOGGING_LEVEL = LEVEL["TRACE"]
+    CURRENT_PRINTING_LEVEL = LEVEL["INFO"]
     DEFAULT_OUTPUT_FILENAME = "log.txt"
 
     def __init__(self, name, outputFilename = None):
-        self._loggername = name
+        self._loggerName = name
         self._outputFilename = outputFilename if outputFilename is not None else Logger.DEFAULT_OUTPUT_FILENAME
         self._changeOutputFile()
     
@@ -32,29 +33,39 @@ class Logger(object):
             self._changeOutputFile()
             
     def trace(self, object):
-        if Logger.CURRENT_LOGGING_LEVEL <= Logger.LOGGING_LEVEL["TRACE"]:
-            self._write("[" + self._loggername + "][TRC]: " + str(object))
+        message = self._buildStringToPrint("TRC", object)
+        self._writeIfAllowed(message, Logger.LEVEL["TRACE"])
             
     def debug(self, object):
-        if Logger.CURRENT_LOGGING_LEVEL <= Logger.LOGGING_LEVEL["DEBUG"]:
-            self._write("[" + self._loggername + "][DBG]: " + str(object))
-        
+        message = self._buildStringToPrint("DBG", object)
+        self._writeIfAllowed(message, Logger.LEVEL["DEBUG"])
+
     def info(self, object):
-        if Logger.CURRENT_LOGGING_LEVEL <= Logger.LOGGING_LEVEL["INFO"]:
-            self._write("[" + self._loggername + "][INF]: " + str(object))
-        
+        message = self._buildStringToPrint("INF", object)
+        self._writeIfAllowed(message, Logger.LEVEL["INFO"])
+
     def warning(self, object):
-        if Logger.CURRENT_LOGGING_LEVEL <= Logger.LOGGING_LEVEL["WARNING"]:
-            self._write("[" + self._loggername + "][WRN]: " + str(object))
+        message = self._buildStringToPrint("WRN", object)
+        self._writeIfAllowed(message, Logger.LEVEL["WARNING"])
         
     def error(self, object):
-        if Logger.CURRENT_LOGGING_LEVEL <= Logger.LOGGING_LEVEL["ERROR"]:
-            self._write("[" + self._loggername + "][ERR]: " + str(object))
+        message = self._buildStringToPrint("ERR", object)
+        self._writeIfAllowed(message, Logger.LEVEL["ERROR"])
             
-    def _write(self, string):
+    def _writeIfAllowed(self, message, loggerLevel):
+        if Logger.CURRENT_LOGGING_LEVEL <= loggerLevel:
+            self._writeToFile(message)
+            
+        if Logger.CURRENT_PRINTING_LEVEL <= loggerLevel:
+            print(message)
+            
+    def _writeToFile(self, string):
         timestamp = datetime.utcnow().strftime('%H:%M:%S:%f')[:-3]
         self._output_file.writeLine("[" + timestamp + "]" + string)
         self._output_file.flush()
+        
+    def _buildStringToPrint(self, shorthandStringForLevel, object):
+        return "[" + self._loggerName + "][" + shorthandStringForLevel + "]: " + str(object)
 
     def getLogger(name):
         if name not in Logger.LOGGER:
