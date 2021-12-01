@@ -13,6 +13,8 @@ class Logger(object):
         "INFO" : 1,
         "WARNING" : 2,
         "ERROR" : 3,
+        "IMPORTANT" : 4,
+        "NONE" : 99
     }
     CURRENT_LOGGING_LEVEL = LEVEL["TRACE"]
     CURRENT_PRINTING_LEVEL = LEVEL["INFO"]
@@ -51,6 +53,10 @@ class Logger(object):
     def error(self, object):
         message = self._buildStringToPrint("ERR", object)
         self._writeIfAllowed(message, Logger.LEVEL["ERROR"])
+        
+    def vip(self, object):
+        message = self._buildStringToPrint("VIP", object)
+        self._writeIfAllowed(message, Logger.LEVEL["IMPORTANT"])
             
     def _writeIfAllowed(self, message, loggerLevel):
         if Logger.CURRENT_LOGGING_LEVEL <= loggerLevel:
