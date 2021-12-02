@@ -5,6 +5,8 @@ from utils.Logger import Logger
 import os.path
 
 class DownloadRequestBuilder(object) :
+
+    YOUTUBE_URL_PREFIX = "https://www.youtube.com/watch?v="
     
     def __init__(self, filename) :
         self._logger = Logger.getLogger("DownloadRequestBuilder - " + filename)
@@ -45,7 +47,16 @@ class DownloadRequestBuilder(object) :
             if "subdirectory" not in download_request :
                 download_request["subdirectory"] = ""
                 
+            if "video_id" in download_request and "url" not in download_request:
+                download_request["url"] = DownloadRequestBuilder.YOUTUBE_URL_PREFIX + download_request["video_id"]
+                
+            if "video_id" not in download_request or download_request["video_id"].strip() == "":
+                download_request["video_id"] = self._getVideoIdFromYoutubeUrl(download_request["url"])
+
             self._addDownloadRequest(download_request, download_request["managed_directory_name"])
+            
+    def _getVideoIdFromYoutubeUrl(self, url):
+        return url[url.find("=") + 1:]
             
     def _addDownloadRequest(self, download_request_dict, managed_directory_name) :
         if managed_directory_name not in self._download_requests:

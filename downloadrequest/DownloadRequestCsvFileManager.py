@@ -16,7 +16,7 @@ class DownloadRequestCsvFileManager(object):
         self._extractCsvKeys()
      
     def _extractCsvKeys(self):
-        self._logger.debug("_extractCsvKeys() called")
+        self._logger.trace("_extractCsvKeys() called")
         first_line = self._csv_file.readLine()
         
         self._logger.debug("Line read from file: " + first_line)
@@ -27,7 +27,7 @@ class DownloadRequestCsvFileManager(object):
             self._csv_keys.append(token.strip())
             
     def _createAndOpenFile(self):
-        self._logger.debug("_createAndOpenFile() called")
+        self._logger.trace("_createAndOpenFile() called")
         self._createNewCsvFileIfItDoesNotExist()
         self._csv_file = TextFile(self._filename, "r+")
        
@@ -68,7 +68,7 @@ class DownloadRequestCsvFileManager(object):
     def addDownloadRequest(self, download_request_dictionary):
         self._logger.debug("addDownloadRequest() called. download_request_dictionary: " + str(download_request_dictionary))
         line_to_write = ""
-        
+
         for key in self._csv_keys:
             value_to_write = ""
             if key in download_request_dictionary:
@@ -77,16 +77,17 @@ class DownloadRequestCsvFileManager(object):
             line_to_write += value_to_write + ","
 
         self._logger.debug("line_to_write: " + line_to_write)
-        self._csv_file.writeLine(line_to_write[:-1])
-        
+        self._csv_file.writeLine(line_to_write[:-1])  
+
     def _writeDownloadRequestKeys(self):
         self._logger.info("Writing download request keys to csv file")
-        self._csv_file.write("url, managed_directory_name, subdirectory")
+        self._csv_file.write("video_id, managed_directory_name, subdirectory")
         self._writeAdditionalDownloadRequestKeys()
         self._csv_file.writeLine("")
         
     def _writeAdditionalDownloadRequestKeys(self):
         pass
+
         
 class FailedDownloadRequestCsvFileManager(DownloadRequestCsvFileManager):
     
