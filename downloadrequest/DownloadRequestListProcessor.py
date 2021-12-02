@@ -98,4 +98,3 @@ class DownloadRequestListProcessor:
             
             message = "Saving download request: " + str(download_request)
             self._logger.info(message)
-            print(message)

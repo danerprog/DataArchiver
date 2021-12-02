@@ -1,10 +1,12 @@
 from utils.fileio.TextFileManager import TextFileManager
 
+import colorama
 from datetime import datetime
 from pathlib import Path
 
 class Logger(object):
     
+    HAS_COLORAMA_BEEN_INITIALIZED = False
     LOGGER = {}
     TEXT_FILES = {}
     LEVEL = {
@@ -16,15 +18,25 @@ class Logger(object):
         "IMPORTANT" : 4,
         "NONE" : 99
     }
+    COLOR = {
+        LEVEL["TRACE"] : colorama.Fore.WHITE,
+        LEVEL["DEBUG"] : colorama.Fore.CYAN,
+        LEVEL["INFO"] : colorama.Fore.BLUE + colorama.Style.BRIGHT,
+        LEVEL["WARNING"] : colorama.Fore.YELLOW,
+        LEVEL["ERROR"] : colorama.Fore.RED,
+        LEVEL["IMPORTANT"] : colorama.Fore.MAGENTA,
+        "reset" : colorama.Style.RESET_ALL + colorama.Fore.RESET
+    }
     CURRENT_LOGGING_LEVEL = LEVEL["TRACE"]
-    CURRENT_PRINTING_LEVEL = LEVEL["INFO"]
+    CURRENT_PRINTING_LEVEL = LEVEL["TRACE"]
     DEFAULT_OUTPUT_FILENAME = "log.txt"
 
     def __init__(self, name, outputFilename = None):
+        Logger._initializeColorama()
         self._loggerName = name
         self._outputFilename = outputFilename if outputFilename is not None else Logger.DEFAULT_OUTPUT_FILENAME
         self._changeOutputFile()
-    
+        
     def _changeOutputFile(self):
         self._file_manager = TextFileManager(self._outputFilename, "a+")
         self._output_file = self._file_manager.getFile()
@@ -63,7 +75,7 @@ class Logger(object):
             self._writeToFile(message)
             
         if Logger.CURRENT_PRINTING_LEVEL <= loggerLevel:
-            print(message)
+            print(Logger.COLOR[loggerLevel] + message + Logger.COLOR["reset"])
             
     def _writeToFile(self, string):
         timestamp = datetime.utcnow().strftime('%H:%M:%S:%f')[:-3]
@@ -77,3 +89,8 @@ class Logger(object):
         if name not in Logger.LOGGER:
             Logger.LOGGER[name] = Logger(name)
         return Logger.LOGGER[name]
+        
+    def _initializeColorama():
+        if not Logger.HAS_COLORAMA_BEEN_INITIALIZED:
+            colorama.init()
+            Logger.HAS_COLORAMA_BEEN_INITIALIZED = True
