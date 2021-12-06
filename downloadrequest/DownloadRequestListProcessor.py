@@ -33,16 +33,40 @@ class DownloadRequestListProcessor:
             
             if args['info_dict']['ext'] == 'mp4':
                 self._logger.trace("archiving and resetting download request.")
-                                   
-                infojson_filename = args['info_dict']['infojson_filename']
-                self._move_downloaded_file_to_own_folder_if_necessary(infojson_filename)
-                self._move_downloaded_file_to_own_folder_if_necessary(infojson_filename.replace(".info.json", ".description"))
-
-                self._current_download_request_for_processing["video_duration_in_seconds"] = str(args['info_dict']['duration'])                         
-                self._successful_download_request_archiver.archiveDownloadRequest(self._current_download_request_for_processing)
+                
+                self._move_extra_downloaded_files_to_own_folder(args['info_dict']['infojson_filename'])
+                download_request = self._get_current_download_request_with_important_info(args['info_dict'])
+               
+                self._logger.debug("Archived download request: " + str(download_request))
+                self._successful_download_request_archiver.archiveDownloadRequest(download_request)
                 self._reset_current_download_request()
             else:
                 self._logger.trace("skipping archiving process.")
+                
+    def _move_downloaded_file_to_own_folder_if_necessary(self, filepath):
+        self._logger.trace("_move_downloaded_file_to_own_folder_if_necessary called")
+        video_id = self._current_download_request_for_processing["video_id"]
+        if filepath.find(video_id) == -1:
+            fixed_filepath = filepath.replace("\\\\", "\\")
+            index_of_last_backslash = fixed_filepath.rfind("\\")
+            directory_path = fixed_filepath[:index_of_last_backslash] + "\\" + video_id
+            new_filepath = directory_path + "\\" + fixed_filepath[index_of_last_backslash:]
+            
+            self._logger.debug("Moving file. filepath: " + filepath + ", new_filepath: " + new_filepath + ", video_id: " + video_id)
+            os.makedirs(directory_path, exist_ok = True)
+            Path(filepath).rename(new_filepath)
+            
+    def _move_extra_downloaded_files_to_own_folder(self, infojson_filepath):
+        self._move_downloaded_file_to_own_folder_if_necessary(infojson_filepath)
+        self._move_downloaded_file_to_own_folder_if_necessary(infojson_filepath.replace(".info.json", ".description"))
+        
+    def _get_current_download_request_with_important_info(self, info_dictionary):
+        download_request = self._current_download_request_for_processing
+        download_request["video_title"] = info_dictionary['fulltitle'].replace(",", "")
+        download_request["video_duration_in_seconds"] = str(info_dictionary['duration'])
+        download_request["channel_name"] = info_dictionary['uploader']
+        download_request["channel_id"] = info_dictionary['channel_id']
+        return download_request
 
     def _failed_hook(self, args):
         if args['status'] == "error":
@@ -113,19 +137,6 @@ class DownloadRequestListProcessor:
     def _reset_current_download_request(self):
         self._current_download_request_for_processing = None
         
-    def _move_downloaded_file_to_own_folder_if_necessary(self, filepath):
-        self._logger.trace("_move_downloaded_file_to_own_folder_if_necessary called")
-        video_id = self._current_download_request_for_processing["video_id"]
-        if filepath.find(video_id) == -1:
-            fixed_filepath = filepath.replace("\\\\", "\\")
-            index_of_last_backslash = fixed_filepath.rfind("\\")
-            directory_path = fixed_filepath[:index_of_last_backslash] + "\\" + video_id
-            new_filepath = directory_path + "\\" + fixed_filepath[index_of_last_backslash:]
-            
-            self._logger.debug("Moving file. filepath: " + filepath + ", new_filepath: " + new_filepath + ", video_id: " + video_id)
-            os.makedirs(directory_path, exist_ok = True)
-            Path(filepath).rename(new_filepath)
-  
     def _create_needed_directories(self, full_directory):
         download_request = self._current_download_request_for_processing
         directory_path_with_video_id = full_directory + "\\" + download_request['video_id']

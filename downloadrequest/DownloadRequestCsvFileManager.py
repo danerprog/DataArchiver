@@ -87,16 +87,18 @@ class DownloadRequestCsvFileManager(object):
         
     def _writeAdditionalDownloadRequestKeys(self):
         pass
-
+        
         
 class FailedDownloadRequestCsvFileManager(DownloadRequestCsvFileManager):
     
     def _writeAdditionalDownloadRequestKeys(self):
+        super()._writeAdditionalDownloadRequestKeys()
         self._csv_file.write(", failure_reason")
         
         
 class SuccessfulDownloadRequestCsvFileManager(DownloadRequestCsvFileManager):
     
     def _writeAdditionalDownloadRequestKeys(self):
-        self._csv_file.write(", video_duration_in_seconds")
+        super()._writeAdditionalDownloadRequestKeys()
+        self._csv_file.write(", video_title, video_duration_in_seconds, channel_name, channel_id")
     
