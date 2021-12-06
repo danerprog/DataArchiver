@@ -3,6 +3,7 @@ from environment.Environment import Environment
 from environment.Environment import UndefinedManagedDirectoryNameException
 from utils.Logger import Logger
 
+import os
 from pathlib import Path
 import yt_dlp
 
@@ -28,8 +29,14 @@ class DownloadRequestListProcessor:
     def _success_hook(self, args):
         if args['status'] == 'finished':
             self._logger.info("Download finished. args['filename']: " + args['filename'])
+            self._move_downloaded_file_to_own_folder_if_necessary(args['filename'])
+            
             if args['info_dict']['ext'] == 'mp4':
-                self._logger.trace("archiving and reseting download request.")
+                self._logger.trace("archiving and resetting download request.")
+                
+                infojson_filename = args['info_dict']['infojson_filename']
+                self._move_downloaded_file_to_own_folder_if_necessary(infojson_filename)
+                self._move_downloaded_file_to_own_folder_if_necessary(infojson_filename.replace(".info.json", ".description"))
                 self._successful_download_request_archiver.archiveDownloadRequest(self._current_download_request_for_processing)
                 self._reset_current_download_request()
             else:
@@ -50,6 +57,7 @@ class DownloadRequestListProcessor:
         full_directory = self._environment_manager.getRoot() + "\\" + self._environment_manager.getManagedDirectoryPath(self._managed_directory_name) + "\\" + self._current_download_request_for_processing["subdirectory"]
         
         if self._doesPathExist(full_directory):
+            self._create_needed_directories(full_directory)
             self._begin_download_for_download_request(full_directory)
         else:
             failure_reason = "Path does not exist. Stopping download. full_directory: " + full_directory + ", download_url: " + self._current_download_request_for_processing["url"]
@@ -74,11 +82,11 @@ class DownloadRequestListProcessor:
     def _begin_download_for_download_request(self, full_directory):
         download_request = self._current_download_request_for_processing
         ydl_options = {
-            "outtmpl" : full_directory + "\\" + DownloadRequestListProcessor.TEMPLATE_FILENAME,
+            "outtmpl" : self._get_outtmpl(full_directory),
             "writeinfojson" : "true", 
             "writesubtitles" : "true",
             "writedescription" : "true",
-            "get_comments" : download_request["get_comments"],
+            "getcomments" : download_request["get_comments"],
             "ratelimit" : 480000,
             "retries" : 3,
             "progress_hooks": [self._success_hook, self._failed_hook],
@@ -102,6 +110,34 @@ class DownloadRequestListProcessor:
         
     def _reset_current_download_request(self):
         self._current_download_request_for_processing = None
+        
+    def _move_downloaded_file_to_own_folder_if_necessary(self, filepath):
+        self._logger.trace("_move_downloaded_file_to_own_folder_if_necessary called")
+        video_id = self._current_download_request_for_processing["video_id"]
+        if filepath.find(video_id) == -1:
+            fixed_filepath = filepath.replace("\\\\", "\\")
+            index_of_last_backslash = fixed_filepath.rfind("\\")
+            directory_path = fixed_filepath[:index_of_last_backslash] + "\\" + video_id
+            new_filepath = directory_path + "\\" + fixed_filepath[index_of_last_backslash:]
+            
+            self._logger.debug("Moving file. filepath: " + filepath + ", new_filepath: " + new_filepath + ", video_id: " + video_id)
+            os.makedirs(directory_path, exist_ok = True)
+            Path(filepath).rename(new_filepath)
+  
+    def _create_needed_directories(self, full_directory):
+        download_request = self._current_download_request_for_processing
+        os.makedirs(full_directory + download_request['video_id'], exist_ok = True)
+        
+    def _get_outtmpl(self, full_directory):
+        video_id = self._current_download_request_for_processing['video_id']
+        full_directory_path_with_video_id = full_directory + "\\" + video_id
+        
+        outtmpl = full_directory
+        if len(os.listdir(full_directory_path_with_video_id)) > 0:
+            outtmpl = outtmpl + "\\" + video_id
+        outtmpl = outtmpl + "\\" + DownloadRequestListProcessor.TEMPLATE_FILENAME
+        
+        return outtmpl
 
     def run(self):
         while len(self._download_request_list) > 0:
