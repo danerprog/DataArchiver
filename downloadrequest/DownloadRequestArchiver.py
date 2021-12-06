@@ -1,5 +1,6 @@
 from downloadrequest.DownloadRequestCsvFileManager import DownloadRequestCsvFileManager
 from downloadrequest.DownloadRequestCsvFileManager import FailedDownloadRequestCsvFileManager
+from downloadrequest.DownloadRequestCsvFileManager import SuccessfulDownloadRequestCsvFileManager
 from environment.Environment import Environment
 
 from datetime import date
@@ -43,3 +44,9 @@ class FailedDownloadRequestArchiver(DownloadRequestArchiver):
     
     def _get_csv_file_manager(self, filepath):
         return FailedDownloadRequestCsvFileManager(filepath)
+        
+        
+class SuccessfulDownloadRequestArchiver(DownloadRequestArchiver):
+    
+    def _get_csv_file_manager(self, filepath):
+        return SuccessfulDownloadRequestCsvFileManager(filepath)

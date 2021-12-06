@@ -1,25 +1,24 @@
+from downloadrequest.DownloadRequestArchiver import FailedDownloadRequestArchiver
+from downloadrequest.DownloadRequestArchiver import SuccessfulDownloadRequestArchiver
 from downloadrequest.DownloadRequestBuilder import DownloadRequestBuilder
 from downloadrequest.DownloadRequestListProcessor import DownloadRequestListProcessor
-from environment.Environment import Environment
 from utils.Logger import Logger
 
-  
+
 class YoutubeArchiver(object):
 
     TEMPLATE_FILENAME = "%(title)s.%(ext)s"
     
-    def __init__(self, args):
+    def __init__(self):
         self._logger = Logger.getLogger("YoutubeDownloader")
-        self._successful_download_request_archiver = args['successful_download_request_archiver']
-        self._failed_download_request_archiver = args['failed_download_request_archiver']
         self._download_request_list_processors = []
         
     def _create_download_request_list_processors(self, download_request_file, download_requests):
         self._logger.trace("_create_download_request_list_processors called")
         for (managed_directory_name, download_request_list) in download_requests.items():
             args = {
-                'successful_download_request_archiver' : self._successful_download_request_archiver,
-                'failed_download_request_archiver' : self._failed_download_request_archiver,
+                'successful_download_request_archiver' : SuccessfulDownloadRequestArchiver("successful_downloads"),
+                'failed_download_request_archiver' : FailedDownloadRequestArchiver("failed_downloads"),
                 'managed_directory_name' : managed_directory_name,
                 'download_request_list' : download_request_list,
                 'download_request_filename' : download_request_file

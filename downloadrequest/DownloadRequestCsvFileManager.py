@@ -93,4 +93,10 @@ class FailedDownloadRequestCsvFileManager(DownloadRequestCsvFileManager):
     
     def _writeAdditionalDownloadRequestKeys(self):
         self._csv_file.write(", failure_reason")
+        
+        
+class SuccessfulDownloadRequestCsvFileManager(DownloadRequestCsvFileManager):
+    
+    def _writeAdditionalDownloadRequestKeys(self):
+        self._csv_file.write(", video_duration_in_seconds")
     

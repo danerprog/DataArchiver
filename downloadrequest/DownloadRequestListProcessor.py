@@ -33,10 +33,12 @@ class DownloadRequestListProcessor:
             
             if args['info_dict']['ext'] == 'mp4':
                 self._logger.trace("archiving and resetting download request.")
-                
+                                   
                 infojson_filename = args['info_dict']['infojson_filename']
                 self._move_downloaded_file_to_own_folder_if_necessary(infojson_filename)
                 self._move_downloaded_file_to_own_folder_if_necessary(infojson_filename.replace(".info.json", ".description"))
+
+                self._current_download_request_for_processing["video_duration_in_seconds"] = str(args['info_dict']['duration'])                         
                 self._successful_download_request_archiver.archiveDownloadRequest(self._current_download_request_for_processing)
                 self._reset_current_download_request()
             else:
@@ -126,7 +128,9 @@ class DownloadRequestListProcessor:
   
     def _create_needed_directories(self, full_directory):
         download_request = self._current_download_request_for_processing
-        os.makedirs(full_directory + download_request['video_id'], exist_ok = True)
+        directory_path_with_video_id = full_directory + "\\" + download_request['video_id']
+        os.makedirs(directory_path_with_video_id, exist_ok = True)
+        self._logger.debug("_create_needed_directories called. directory_path_with_video_id: " + directory_path_with_video_id)
         
     def _get_outtmpl(self, full_directory):
         video_id = self._current_download_request_for_processing['video_id']
