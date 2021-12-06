@@ -14,5 +14,8 @@ class File(object):
     def name(self) :
         return self._filename
         
-    def __del__(self) :
+    def close(self) :
         self._openedFile.close()
+        
+    def __del__(self) :
+        self.close()
