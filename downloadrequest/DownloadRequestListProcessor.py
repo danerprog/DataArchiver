@@ -43,8 +43,9 @@ class DownloadRequestListProcessor:
         if self._doesPathExist(full_directory):
             self._begin_download_for_download_request(full_directory)
         else:
-            self._logger.warning("Path does not exist. Stopping download. full_directory: " + full_directory + ", download_url: " + self._current_download_request_for_processing["url"])
-            self._failed_download_request_archiver.archiveDownloadRequest(self._current_download_request_for_processing)
+            failure_reason = "Path does not exist. Stopping download. full_directory: " + full_directory + ", download_url: " + self._current_download_request_for_processing["url"]
+            self._logger.warning(failure_reason)
+            self._process_failed_download(failure_reason)
             
     def _try_to_process_download_request(self):
         try:

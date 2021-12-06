@@ -41,19 +41,36 @@ class DownloadRequestBuilder(object) :
 
     def _fixAndRearrangeDownloadRequestsAccordingToRootDirectory(self) :
         for download_request in self._download_request_file_manager.getAcceptableDownloadRequests():
-            if "managed_directory_name" not in download_request :
-                download_request["managed_directory_name"] = "default"
-            
-            if "subdirectory" not in download_request :
-                download_request["subdirectory"] = ""
-                
-            if "video_id" in download_request and "url" not in download_request:
-                download_request["url"] = DownloadRequestBuilder.YOUTUBE_URL_PREFIX + download_request["video_id"]
-                
-            if "video_id" not in download_request or download_request["video_id"].strip() == "":
-                download_request["video_id"] = self._getVideoIdFromYoutubeUrl(download_request["url"])
-
+            download_request = self._fixManagedDirectoryName(download_request)
+            download_request = self._fixSubdirectory(download_request)
+            download_request = self._fixUrl(download_request)
+            download_request = self._fixVideoId(download_request)
+            download_request = self._fixGetComments(download_request)
             self._addDownloadRequest(download_request, download_request["managed_directory_name"])
+            
+    def _fixManagedDirectoryName(self, download_request):
+        if "managed_directory_name" not in download_request :
+            download_request["managed_directory_name"] = "default"
+        return download_request
+        
+    def _fixSubdirectory(self, download_request):
+        if "subdirectory" not in download_request :
+            download_request["subdirectory"] = ""
+        return download_request
+        
+    def _fixUrl(self, download_request):
+        if "video_id" in download_request and "url" not in download_request:
+            download_request["url"] = DownloadRequestBuilder.YOUTUBE_URL_PREFIX + download_request["video_id"]
+        return download_request
+    
+    def _fixVideoId(self, download_request):
+        if "video_id" not in download_request or download_request["video_id"].strip() == "":
+            download_request["video_id"] = self._getVideoIdFromYoutubeUrl(download_request["url"])  
+        return download_request
+    
+    def _fixGetComments(self, download_request):
+        download_request["get_comments"] = "get_comments" in download_request and download_request["get_comments"].lower() == "true"
+        return download_request
             
     def _getVideoIdFromYoutubeUrl(self, url):
         return url[url.find("=") + 1:]
