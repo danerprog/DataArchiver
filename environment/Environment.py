@@ -11,7 +11,7 @@ class Environment(object):
     DEFAULT_WORKING_DIRECTORY = ".youtubearchiver"
 
     def __init__(self, config_json_filename):
-        self._config_json_file_manager = ConfigJsonFileManager(config_json_filename)
+        self._config_file_manager = ConfigJsonFileManager(config_json_filename)
         self._working_directory = Path(self.getWorkingDirectory())
         self._prepareEnvironment()
         
@@ -35,19 +35,19 @@ class Environment(object):
             ctypes.windll.kernel32.SetFileAttributesW(str(self._working_directory.resolve()), 0x02)
     
     def getRoot(self):
-        root = self._config_json_file_manager.getRoot()
+        root = self._config_file_manager.getRoot()
         if root == None:
             root = str(Path().resolve())
         return root
         
     def getManagedDirectoryPath(self, managed_directory_name):
         try:
-            return self._config_json_file_manager.getManagedDirectoryPath(managed_directory_name)
+            return self._config_file_manager.getManagedDirectoryPath(managed_directory_name)
         except KeyError as e:
             raise UndefinedManagedDirectoryNameException(str(e))
         
     def getWorkingDirectory(self):
-        directory = self._config_json_file_manager.getWorkingDirectory()
+        directory = self._config_file_manager.getWorkingDirectory()
         if directory == None:
             directory = Environment.DEFAULT_WORKING_DIRECTORY
         return directory
