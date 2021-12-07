@@ -36,7 +36,7 @@ class Logger(object):
         self._loggerName = name
         self._outputFilename = outputFilename if outputFilename is not None else Logger.DEFAULT_OUTPUT_FILENAME
         self._changeOutputFile()
-        
+
     def _changeOutputFile(self):
         self._file_manager = TextFileManager(self._outputFilename, "a+")
         self._output_file = self._file_manager.getFile()
@@ -78,7 +78,7 @@ class Logger(object):
             print(Logger.COLOR[loggerLevel] + message + Logger.COLOR["reset"])
             
     def _writeToFile(self, string):
-        timestamp = datetime.utcnow().strftime('%H:%M:%S:%f')[:-3]
+        timestamp = datetime.now().strftime('%H:%M:%S:%f')[:-3]
         self._output_file.writeLine("[" + timestamp + "]" + string)
         self._output_file.flush()
         
