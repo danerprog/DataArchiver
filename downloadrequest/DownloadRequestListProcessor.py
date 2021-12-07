@@ -33,15 +33,32 @@ class DownloadRequestListProcessor:
             
             if args['info_dict']['ext'] == 'mp4':
                 self._logger.trace("archiving and resetting download request.")
-                
                 self._move_extra_downloaded_files_to_own_folder(args['info_dict']['infojson_filename'])
-                download_request = self._get_current_download_request_with_important_info(args['info_dict'])
-               
-                self._logger.debug("Archived download request: " + str(download_request))
-                self._successful_download_request_archiver.archiveDownloadRequest(download_request)
+                
+                if "was_downloaded" in self._current_download_request_for_processing:
+                    download_request = self._get_current_download_request_with_important_info(args['info_dict'])
+                    self._logger.debug("Archived download request: " + str(download_request))
+                    self._successful_download_request_archiver.archiveDownloadRequest(download_request)
+                    
                 self._reset_current_download_request()
             else:
                 self._logger.trace("skipping archiving process.")
+                
+    def _failed_hook(self, args):
+        if args['status'] == "error":
+            failure_reason = "Download failed. args['filename']: " + args['filename']
+            self._logger.info(failure_reason)
+            
+            if args['info_dict']['ext'] == 'mp4':
+                self._logger.trace("archiving and reseting download request.")
+                self._process_failed_download(failure_reason)
+            else:
+                self._logger.trace("skipping archiving process.")  
+      
+    def _downloading_hook(self, args):
+        if args['status'] == "downloading":
+            self._logger.trace("downloading...")
+            self._current_download_request_for_processing["was_downloaded"] = True
                 
     def _move_downloaded_file_to_own_folder_if_necessary(self, filepath):
         self._logger.trace("_move_downloaded_file_to_own_folder_if_necessary called")
@@ -68,17 +85,6 @@ class DownloadRequestListProcessor:
         download_request["channel_id"] = info_dictionary['channel_id']
         return download_request
 
-    def _failed_hook(self, args):
-        if args['status'] == "error":
-            failure_reason = "Download failed. args['filename']: " + args['filename']
-            self._logger.info(failure_reason)
-            
-            if args['info_dict']['ext'] == 'mp4':
-                self._logger.trace("archiving and reseting download request.")
-                self._process_failed_download(failure_reason)
-            else:
-                self._logger.trace("skipping archiving process.")
-   
     def _process_download_request(self):
         full_directory = self._environment_manager.getRoot() + "\\" + self._environment_manager.getManagedDirectoryPath(self._managed_directory_name) + "\\" + self._current_download_request_for_processing["subdirectory"]
         
@@ -100,8 +106,7 @@ class DownloadRequestListProcessor:
         except UndefinedManagedDirectoryNameException as e:
             message = "UndefinedManagedDirectoryNameException caught. managed_directory_name: " + str(e)
             self._logger.info(message)
-            self._process_failed_download(message)
-
+            
     def _doesPathExist(self, directory):
         return Path(directory).is_dir()
             
@@ -115,7 +120,7 @@ class DownloadRequestListProcessor:
             "getcomments" : download_request["get_comments"],
             "ratelimit" : 480000,
             "retries" : 3,
-            "progress_hooks": [self._success_hook, self._failed_hook],
+            "progress_hooks": [self._success_hook, self._failed_hook, self._downloading_hook],
         }
         
         download_url = download_request["url"]
