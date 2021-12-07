@@ -124,7 +124,7 @@ class DownloadRequestListProcessor:
         }
         
         download_url = download_request["url"]
-        self._logger.info("Processing new download request. download_url: " + download_url + "ydl_options: " + str(ydl_options))
+        self._logger.info("Processing new download request. download_url: " + download_url + ", ydl_options: " + str(ydl_options))
         ydl = yt_dlp.YoutubeDL(ydl_options)
         ydl.download([download_url])
         
