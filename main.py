@@ -1,56 +1,13 @@
-from environment.Environment import Environment
-from archivers.YoutubeArchiver import YoutubeArchiver
+from interfaces.ConsoleInterface import ConsoleInterface
 
 import getopt
 import sys
 
-def extract_options_and_arguments(command):
-    options = []
-    arguments = []
-    
-    try:
-        options, arguments = getopt.getopt(command.split(),"",["youtube_archiver=","quit"])
-    except getopt.GetoptError as e:
-        pass
-    
-    return options, arguments
-
-def display_menu() :
-    print("################## Data Archiver - Alpha v0.1.0 #################")
-    print("Automatically archives and manages your scraped data")
-    print()
-    print("########################### Archivers ###########################")
-    print("YoutubeArchiver: Archive batches of youtube videos. Usage --youtube_archiver <download_request_file>")
-    
-    print()
-    print()
-
-def run(config_file) :
-    Environment.setEnvironment({
-        "config_file" : config_file
-    })
-    youtube_archiver = YoutubeArchiver()
-
-    while True:
-        display_menu()
-        command = input("Command: ")
-        options, arguments = extract_options_and_arguments(command)
-        
-        if len(options) > 0:
-            option, value = options[0]
-            
-            if option == "--youtube_archiver" :
-                youtube_archiver.download(value)
-            elif option == "--quit" :
-                break
-                
-        print()
-        print()
-
 if __name__ == "__main__" :
+    options, arguments = getopt.getopt((sys.argv[1:]),"",["config=","help","youtube_archiver="])
+    is_command_line_mode_enabled = False
+    filename = None
     config_file = "config.json"
-    
-    options, arguments = getopt.getopt((sys.argv[1:]),"",["config=","help"])
     
     for option, value in options:
         if option == "--help" :
@@ -59,6 +16,16 @@ if __name__ == "__main__" :
             sys.exit()
         elif option == "--config" :
             config_file = value
+        elif option == "--youtube_archiver" :
+            is_command_line_mode_enabled = True
+            filename = value
 
-    run(config_file)
+    interface = ConsoleInterface({
+        'config_file' : config_file
+    })
+    
+    if is_command_line_mode_enabled:
+        interface.runYoutubeArchiver(filename)
+    else:
+        interface.start()
         
