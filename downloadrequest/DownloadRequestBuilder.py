@@ -49,7 +49,7 @@ class DownloadRequestBuilder(object) :
             self._addDownloadRequest(download_request, download_request["managed_directory_name"])
             
     def _fixManagedDirectoryName(self, download_request):
-        if "managed_directory_name" not in download_request :
+        if "managed_directory_name" not in download_request or download_request["managed_directory_name"].strip() == "":
             download_request["managed_directory_name"] = "default"
         return download_request
         
