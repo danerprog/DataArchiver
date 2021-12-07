@@ -32,8 +32,13 @@ class ConsoleInterface:
         print()
         
     def runYoutubeArchiver(self, filename):
-        self._youtubeArchiver.download(filename)
-        
+        print()
+        print(">>>>>> Running Youtube Archiver...")
+        numberOfDownloadRequestsFound = self._youtubeArchiver.download(filename)
+        print(">>>>>> Archiving complete.")
+        print(">>>>>> File processed: " + filename)
+        print(">>>>>> Number of download requests found: " + str(numberOfDownloadRequestsFound))
+  
     def start() :
         while True:
             self._displayMenu()

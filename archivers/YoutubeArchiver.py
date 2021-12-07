@@ -46,4 +46,5 @@ class YoutubeArchiver(object):
         download_requests = DownloadRequestBuilder(download_request_file).getDownloadRequests()
         self._create_download_request_list_processors(download_request_file, download_requests)
         self._run_download_request_lists()
+        return len(download_requests)
 
