@@ -30,6 +30,7 @@ class Logger(object):
     CURRENT_LOGGING_LEVEL = LEVEL["TRACE"]
     CURRENT_PRINTING_LEVEL = LEVEL["TRACE"]
     DEFAULT_OUTPUT_FILENAME = "log.txt"
+    IS_TIMESTAMP_ENABLED = False
 
     def __init__(self, name, outputFilename = None):
         Logger._initializeColorama()
@@ -78,8 +79,11 @@ class Logger(object):
             print(Logger.COLOR[loggerLevel] + message + Logger.COLOR["reset"])
             
     def _writeToFile(self, string):
-        timestamp = datetime.now().strftime('%H:%M:%S:%f')[:-3]
-        self._output_file.writeLine("[" + timestamp + "]" + string)
+        if Logger.IS_TIMESTAMP_ENABLED:
+            timestamp = datetime.now().strftime('%H:%M:%S:%f')[:-3]
+            self._output_file.writeLine("[" + timestamp + "]" + string)
+        else:
+            self._output_file.writeLine(string)
         self._output_file.flush()
         
     def _buildStringToPrint(self, shorthandStringForLevel, object):
