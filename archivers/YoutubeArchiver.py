@@ -10,7 +10,7 @@ class YoutubeArchiver(object):
     TEMPLATE_FILENAME = "%(title)s.%(ext)s"
     
     def __init__(self):
-        self._logger = Logger.getLogger("YoutubeDownloader")
+        self._logger = Logger.getLogger("YoutubeArchiver")
         self._download_request_list_processors = []
         
     def _create_download_request_list_processors(self, download_request_file, download_requests):

@@ -1,14 +1,9 @@
-from environment.Environment import Environment
 from archivers.YoutubeArchiver import YoutubeArchiver
 
 class ConsoleInterface:
 
-    def __init__(self, args):
+    def __init__(self):
         self._youtubeArchiver = YoutubeArchiver()
-        
-        Environment.setEnvironment({
-            'config_file' : args['config_file']
-        })
         
     def _extractOptionsAndArguments(command):
         options = []

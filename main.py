@@ -1,4 +1,5 @@
 from interfaces.ConsoleInterface import ConsoleInterface
+from environment.Environment import Environment
 
 import getopt
 import sys
@@ -19,10 +20,12 @@ if __name__ == "__main__" :
         elif option == "--youtube_archiver" :
             is_command_line_mode_enabled = True
             filename = value
-
-    interface = ConsoleInterface({
+    
+    Environment.setEnvironment({
         'config_file' : config_file
     })
+    
+    interface = ConsoleInterface()
     
     if is_command_line_mode_enabled:
         interface.runYoutubeArchiver(filename)

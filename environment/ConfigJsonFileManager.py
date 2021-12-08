@@ -32,7 +32,6 @@ class ConfigJsonFileManager(object) :
     DEFAULT_NUMBER_OF_RETRIES = 0
 
     def __init__(self, filename):
-        self._logger = Logger.getLogger("ConfigJsonFileManager")
         self._configuration = {}
     
         try :
@@ -47,7 +46,6 @@ class ConfigJsonFileManager(object) :
                 
         except FileNotFoundError as e:
             self._generateConfigFile()
-            self._logger.error(traceback.format_exc())
             raise FileNotFoundError("File " + filename + " is not found. See " + ConfigJsonFileManager.SAMPLE_CONFIG_FILENAME + " to guide you on how to create a config file.")
 
     def _getConfigurationValues(self):
