@@ -10,7 +10,7 @@ class DownloadRequestArchiver(object):
 
     def __init__(self, directory):
         self._environment = Environment.getEnvironment()
-        self._directory =  self._environment.getWorkingDirectory() + "\\" + directory
+        self._directory =  self._environment.configuration().getWorkingDirectory() + "\\" + directory
         self._csv_file_manager = None
         self._date_since_last_opened_file = date.today()
         self._filename = ""

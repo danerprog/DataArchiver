@@ -1,6 +1,6 @@
 from downloadrequest.DownloadRequestCsvFileManager import DownloadRequestCsvFileManager
 from environment.Environment import Environment
-from environment.Environment import UndefinedManagedDirectoryNameException
+from environment.Exceptions import UndefinedManagedDirectoryNameException
 from utils.Logger import Logger
 
 import os
@@ -14,7 +14,7 @@ class DownloadRequestListProcessor:
     
     def __init__(self, args):
         self._logger = Logger.getLogger("DownloadRequestListProcessor")
-        self._environment_manager = Environment.getEnvironment()
+        self._configuration = Environment.getEnvironment().configuration()
         self._successful_download_request_archiver = args['successful_download_request_archiver']
         self._failed_download_request_archiver = args['failed_download_request_archiver']
         self._managed_directory_name = args['managed_directory_name']
@@ -86,7 +86,7 @@ class DownloadRequestListProcessor:
         return download_request
 
     def _process_download_request(self):
-        full_directory = self._environment_manager.getRoot() + "\\" + self._environment_manager.getManagedDirectoryPath(self._managed_directory_name) + "\\" + self._current_download_request_for_processing["subdirectory"]
+        full_directory = self._configuration.getRoot() + "\\" + self._configuration.getManagedDirectoryPath(self._managed_directory_name) + "\\" + self._current_download_request_for_processing["subdirectory"]
         
         if self._doesPathExist(full_directory):
             self._create_needed_directories(full_directory)
@@ -118,8 +118,8 @@ class DownloadRequestListProcessor:
             "writesubtitles" : "true",
             "writedescription" : "true",
             "getcomments" : download_request["get_comments"],
-            "ratelimit" : 480000,
-            "retries" : 3,
+            "ratelimit" : self._configuration.getRateLimit(),
+            "retries" : self._configuration.getNumberOfRetries(),
             "progress_hooks": [self._success_hook, self._failed_hook, self._downloading_hook],
         }
         
