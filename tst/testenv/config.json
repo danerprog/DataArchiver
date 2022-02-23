@@ -1,0 +1,15 @@
+{
+	"root" : "F:\\vision\\softwaredeveloper\\sources\\python\\externaldrivesystem\\tst\\testenv",
+	"working_directory" : "F:\\vision\\softwaredeveloper\\sources\\python\\externaldrivesystem\\tst\\testenv\\workingdirectory",
+	"managed_directories" : {
+		"default" : "videos"
+	},
+	"logger" : {
+		"log_printing_level" : "trace",
+		"console_printing_level" : "trace"
+	},
+	"download" : {
+		"rate_limit" : 600000,
+		"number_of_retries" : 3
+	}
+}

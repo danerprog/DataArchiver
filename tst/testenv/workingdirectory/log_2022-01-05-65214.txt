@@ -1,0 +1,113 @@
+[YoutubeArchiver][TRC]: download called
+[DownloadRequestCsvFileManager - tst/testenv/dr.csv][TRC]: _createAndOpenFile() called
+[DownloadRequestCsvFileManager - tst/testenv/dr.csv][TRC]: _extractCsvKeys() called
+[DownloadRequestCsvFileManager - tst/testenv/dr.csv][DBG]: Line read from file: video_id, managed_directory_name, subdirectory
+[DownloadRequestCsvFileManager - tst/testenv/dr.csv][DBG]: token: video_id
+[DownloadRequestCsvFileManager - tst/testenv/dr.csv][DBG]: token:  managed_directory_name
+[DownloadRequestCsvFileManager - tst/testenv/dr.csv][DBG]: token:  subdirectory
+[DownloadRequestCsvFileManager - tst/testenv/dr.csv][DBG]: Line is not empty. Processing...
+[DownloadRequestCsvFileManager - tst/testenv/dr.csv][DBG]: WS7kSlv9uKk,default,
+[DownloadRequestCsvFileManager - tst/testenv/dr.csv][DBG]: {'video_id': 'WS7kSlv9uKk', 'managed_directory_name': 'default', 'subdirectory': ''}
+[DownloadRequestCsvFileManager - tst/testenv/dr.csv][DBG]: Line is not empty. Processing...
+[DownloadRequestCsvFileManager - tst/testenv/dr.csv][DBG]: video_id, managed_directory_name, subdirectory
+[DownloadRequestCsvFileManager - tst/testenv/dr.csv][DBG]: {'video_id': 'video_id', 'managed_directory_name': 'managed_directory_name', 'subdirectory': 'subdirectory'}
+[YoutubeArchiver][TRC]: _create_download_request_list_processors called
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][TRC]: _createAndOpenFile() called
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][INF]: Writing download request keys to csv file
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][TRC]: _extractCsvKeys() called
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: Line read from file: video_id, managed_directory_name, subdirectory, video_title, video_duration_in_seconds, channel_name, channel_id
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: token: video_id
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: token:  managed_directory_name
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: token:  subdirectory
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: token:  video_title
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: token:  video_duration_in_seconds
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: token:  channel_name
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: token:  channel_id
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\failed_downloads\Jan-05-2022.csv][TRC]: _createAndOpenFile() called
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\failed_downloads\Jan-05-2022.csv][INF]: Writing download request keys to csv file
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\failed_downloads\Jan-05-2022.csv][TRC]: _extractCsvKeys() called
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\failed_downloads\Jan-05-2022.csv][DBG]: Line read from file: video_id, managed_directory_name, subdirectory, failure_reason
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\failed_downloads\Jan-05-2022.csv][DBG]: token: video_id
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\failed_downloads\Jan-05-2022.csv][DBG]: token:  managed_directory_name
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\failed_downloads\Jan-05-2022.csv][DBG]: token:  subdirectory
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\failed_downloads\Jan-05-2022.csv][DBG]: token:  failure_reason
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][TRC]: _createAndOpenFile() called
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][TRC]: _extractCsvKeys() called
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: Line read from file: video_id, managed_directory_name, subdirectory, video_title, video_duration_in_seconds, channel_name, channel_id
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: token: video_id
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: token:  managed_directory_name
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: token:  subdirectory
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: token:  video_title
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: token:  video_duration_in_seconds
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: token:  channel_name
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: token:  channel_id
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\failed_downloads\Jan-05-2022.csv][TRC]: _createAndOpenFile() called
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\failed_downloads\Jan-05-2022.csv][TRC]: _extractCsvKeys() called
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\failed_downloads\Jan-05-2022.csv][DBG]: Line read from file: video_id, managed_directory_name, subdirectory, failure_reason
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\failed_downloads\Jan-05-2022.csv][DBG]: token: video_id
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\failed_downloads\Jan-05-2022.csv][DBG]: token:  managed_directory_name
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\failed_downloads\Jan-05-2022.csv][DBG]: token:  subdirectory
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\failed_downloads\Jan-05-2022.csv][DBG]: token:  failure_reason
+[YoutubeArchiver][TRC]: _run_download_request_lists called
+[YoutubeArchiver][TRC]: running download request list.
+[DownloadRequestListProcessor][DBG]: queue: {'video_id': 'WS7kSlv9uKk', 'managed_directory_name': 'default', 'subdirectory': '', 'url': 'https://www.youtube.com/watch?v=WS7kSlv9uKk', 'get_comments': False}
+[DownloadRequestListProcessor][DBG]: _create_needed_directories called. directory_path_with_video_id: F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\videos\\WS7kSlv9uKk
+[DownloadRequestListProcessor][INF]: Processing new download request. download_url: https://www.youtube.com/watch?v=WS7kSlv9uKk, ydl_options: {'outtmpl': 'F:\\vision\\softwaredeveloper\\sources\\python\\externaldrivesystem\\tst\\testenv\\videos\\\\%(title)s.%(ext)s', 'writeinfojson': 'true', 'writesubtitles': 'true', 'writedescription': 'true', 'getcomments': False, 'ratelimit': 600000, 'retries': 3, 'progress_hooks': [<bound method DownloadRequestListProcessor._success_hook of <downloadrequest.DownloadRequestListProcessor.DownloadRequestListProcessor object at 0x000001D14207B5E0>>, <bound method DownloadRequestListProcessor._failed_hook of <downloadrequest.DownloadRequestListProcessor.DownloadRequestListProcessor object at 0x000001D14207B5E0>>, <bound method DownloadRequestListProcessor._downloading_hook of <downloadrequest.DownloadRequestListProcessor.DownloadRequestListProcessor object at 0x000001D14207B5E0>>]}
+[DownloadRequestListProcessor][TRC]: downloading...
+[DownloadRequestListProcessor][TRC]: downloading...
+[DownloadRequestListProcessor][TRC]: downloading...
+[DownloadRequestListProcessor][TRC]: downloading...
+[DownloadRequestListProcessor][TRC]: downloading...
+[DownloadRequestListProcessor][TRC]: downloading...
+[DownloadRequestListProcessor][TRC]: downloading...
+[DownloadRequestListProcessor][TRC]: downloading...
+[DownloadRequestListProcessor][TRC]: downloading...
+[DownloadRequestListProcessor][TRC]: downloading...
+[DownloadRequestListProcessor][TRC]: downloading...
+[DownloadRequestListProcessor][TRC]: downloading...
+[DownloadRequestListProcessor][TRC]: downloading...
+[DownloadRequestListProcessor][TRC]: downloading...
+[DownloadRequestListProcessor][INF]: Download finished. args['filename']: F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\videos\Default Testing Video.mp4
+[DownloadRequestListProcessor][TRC]: _move_downloaded_file_to_own_folder_if_necessary called
+[DownloadRequestListProcessor][DBG]: Moving file. filepath: F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\videos\Default Testing Video.mp4, new_filepath: F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\videos\WS7kSlv9uKk\\Default Testing Video.mp4, video_id: WS7kSlv9uKk
+[DownloadRequestListProcessor][TRC]: archiving and resetting download request.
+[DownloadRequestListProcessor][TRC]: _move_downloaded_file_to_own_folder_if_necessary called
+[DownloadRequestListProcessor][DBG]: Moving file. filepath: F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\videos\Default Testing Video.info.json, new_filepath: F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\videos\WS7kSlv9uKk\\Default Testing Video.info.json, video_id: WS7kSlv9uKk
+[DownloadRequestListProcessor][TRC]: _move_downloaded_file_to_own_folder_if_necessary called
+[DownloadRequestListProcessor][DBG]: Moving file. filepath: F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\videos\Default Testing Video.description, new_filepath: F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\videos\WS7kSlv9uKk\\Default Testing Video.description, video_id: WS7kSlv9uKk
+[DownloadRequestListProcessor][DBG]: Archived download request: {'video_id': 'WS7kSlv9uKk', 'managed_directory_name': 'default', 'subdirectory': '', 'url': 'https://www.youtube.com/watch?v=WS7kSlv9uKk', 'get_comments': False, 'was_downloaded': True, 'video_title': 'Default Testing Video', 'video_duration_in_seconds': '10', 'channel_name': 'DataArchiverTest', 'channel_id': 'UCaqhzb5AMHU8kYHmHaosoGA'}
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: addDownloadRequest() called. download_request_dictionary: {'video_id': 'WS7kSlv9uKk', 'managed_directory_name': 'default', 'subdirectory': '', 'url': 'https://www.youtube.com/watch?v=WS7kSlv9uKk', 'get_comments': False, 'was_downloaded': True, 'video_title': 'Default Testing Video', 'video_duration_in_seconds': '10', 'channel_name': 'DataArchiverTest', 'channel_id': 'UCaqhzb5AMHU8kYHmHaosoGA'}
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: key: video_id, value_to_write: WS7kSlv9uKk
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: key: managed_directory_name, value_to_write: default
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: key: subdirectory, value_to_write: 
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: key: video_title, value_to_write: Default Testing Video
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: key: video_duration_in_seconds, value_to_write: 10
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: key: channel_name, value_to_write: DataArchiverTest
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: key: channel_id, value_to_write: UCaqhzb5AMHU8kYHmHaosoGA
+[DownloadRequestCsvFileManager - F:\vision\softwaredeveloper\sources\python\externaldrivesystem\tst\testenv\workingdirectory\successful_downloads\Jan-05-2022.csv][DBG]: line_to_write: WS7kSlv9uKk,default,,Default Testing Video,10,DataArchiverTest,UCaqhzb5AMHU8kYHmHaosoGA,
+[YoutubeArchiver][TRC]: running download request list.
+[DownloadRequestListProcessor][DBG]: queue: {'video_id': 'video_id', 'managed_directory_name': 'managed_directory_name', 'subdirectory': 'subdirectory', 'url': 'https://www.youtube.com/watch?v=video_id', 'get_comments': False}
+[DownloadRequestListProcessor][INF]: UndefinedManagedDirectoryNameException caught. managed_directory_name: 'managed_directory_name'
+[DownloadRequestListProcessor][TRC]: __del__ called
+[DownloadRequestListProcessor][TRC]: save_unprocessed_download_requests_to_file called
+[DownloadRequestCsvFileManager - tst/testenv/dr_unprocessed.csv][TRC]: _createAndOpenFile() called
+[DownloadRequestCsvFileManager - tst/testenv/dr_unprocessed.csv][INF]: Writing download request keys to csv file
+[DownloadRequestCsvFileManager - tst/testenv/dr_unprocessed.csv][TRC]: _extractCsvKeys() called
+[DownloadRequestCsvFileManager - tst/testenv/dr_unprocessed.csv][DBG]: Line read from file: video_id, managed_directory_name, subdirectory
+[DownloadRequestCsvFileManager - tst/testenv/dr_unprocessed.csv][DBG]: token: video_id
+[DownloadRequestCsvFileManager - tst/testenv/dr_unprocessed.csv][DBG]: token:  managed_directory_name
+[DownloadRequestCsvFileManager - tst/testenv/dr_unprocessed.csv][DBG]: token:  subdirectory
+[DownloadRequestCsvFileManager - tst/testenv/dr_unprocessed.csv][DBG]: addDownloadRequest() called. download_request_dictionary: {'video_id': 'video_id', 'managed_directory_name': 'managed_directory_name', 'subdirectory': 'subdirectory', 'url': 'https://www.youtube.com/watch?v=video_id', 'get_comments': False}
+[DownloadRequestCsvFileManager - tst/testenv/dr_unprocessed.csv][DBG]: key: video_id, value_to_write: video_id
+[DownloadRequestCsvFileManager - tst/testenv/dr_unprocessed.csv][DBG]: key: managed_directory_name, value_to_write: managed_directory_name
+[DownloadRequestCsvFileManager - tst/testenv/dr_unprocessed.csv][DBG]: key: subdirectory, value_to_write: subdirectory
+[DownloadRequestCsvFileManager - tst/testenv/dr_unprocessed.csv][DBG]: line_to_write: video_id,managed_directory_name,subdirectory,
+[DownloadRequestListProcessor][INF]: Saving download request: {'video_id': 'video_id', 'managed_directory_name': 'managed_directory_name', 'subdirectory': 'subdirectory', 'url': 'https://www.youtube.com/watch?v=video_id', 'get_comments': False}
+[DownloadRequestListProcessor][TRC]: __del__ called
+[DownloadRequestListProcessor][TRC]: save_unprocessed_download_requests_to_file called
+[DownloadRequestCsvFileManager - tst/testenv/dr_unprocessed.csv][TRC]: _createAndOpenFile() called
+[DownloadRequestCsvFileManager - tst/testenv/dr_unprocessed.csv][TRC]: _extractCsvKeys() called
+[DownloadRequestCsvFileManager - tst/testenv/dr_unprocessed.csv][DBG]: Line read from file: video_id, managed_directory_name, subdirectory
+[DownloadRequestCsvFileManager - tst/testenv/dr_unprocessed.csv][DBG]: token: video_id
+[DownloadRequestCsvFileManager - tst/testenv/dr_unprocessed.csv][DBG]: token:  managed_directory_name
+[DownloadRequestCsvFileManager - tst/testenv/dr_unprocessed.csv][DBG]: token:  subdirectory

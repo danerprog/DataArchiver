@@ -19,7 +19,7 @@ if __name__ == "__main__" :
             config_file = value
         elif option == "--youtube_archiver" :
             is_command_line_mode_enabled = True
-            filename = value
+            archiver_options = value
     
     Environment.setEnvironment({
         'config_file' : config_file
@@ -28,7 +28,7 @@ if __name__ == "__main__" :
     interface = ConsoleInterface()
     
     if is_command_line_mode_enabled:
-        interface.runYoutubeArchiver(filename)
+        interface.runYoutubeArchiver(archiver_options)
     else:
         interface.start()
         

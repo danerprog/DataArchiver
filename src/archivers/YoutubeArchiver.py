@@ -1,6 +1,7 @@
 from downloadrequest.DownloadRequestArchiver import FailedDownloadRequestArchiver
 from downloadrequest.DownloadRequestArchiver import SuccessfulDownloadRequestArchiver
-from downloadrequest.DownloadRequestBuilder import DownloadRequestBuilder
+from downloadrequest.DownloadRequestBuilder import FileDownloadRequestBuilder
+from downloadrequest.DownloadRequestBuilder import SingleDownloadRequestBuilder
 from downloadrequest.DownloadRequestListProcessor import DownloadRequestListProcessor
 from utils.Logger import Logger
 
@@ -41,10 +42,28 @@ class YoutubeArchiver(object):
         self._logger.trace("_trigger_list_processors_to_save_remaining_download_requests called")
         self._download_request_list_processors = None
         
-    def download(self, download_request_file):
-        self._logger.trace("download called")
-        download_requests = DownloadRequestBuilder(download_request_file).getDownloadRequests()
-        self._create_download_request_list_processors(download_request_file, download_requests)
+    def _downloadUsingFilename(self, filename):
+        self._logger.trace("_downloadUsingFilename called")
+        download_requests = FileDownloadRequestBuilder(filename).getDownloadRequests()
+        self._create_download_request_list_processors(filename, download_requests)
         self._run_download_request_lists()
         return len(download_requests)
+        
+    def _downloadUsingHeadersAndValues(self, headers, values):
+        self._logger.trace("_downloadUsingHeadersAndValues called")
+        download_requests = SingleDownloadRequestBuilder(headers, values).getDownloadRequests()
+        self._create_download_request_list_processors("header_and_value_request", download_requests)
+        self._run_download_request_lists()
+        return len(download_requests)
+    
+    def download(self, args):
+        self._logger.trace("download called")
+        number_of_download_requests = 0
+        if "filename" in args:
+            number_of_download_requests = self._downloadUsingFilename(args["filename"])
+        elif "headers" in args and "values" in args:
+            number_of_download_requests = self._downloadUsingHeadersAndValues(args["headers"], args["values"])
 
+        return number_of_download_requests
+        
+    
