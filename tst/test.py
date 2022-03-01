@@ -10,6 +10,7 @@ sys.path.append(parentDirectoryPath + "src")
 
 from archivers.YoutubeArchiver import YoutubeArchiver
 from environment.Environment import Environment
+from environment.Exceptions import UndefinedManagedDirectoryNameException
 
 import glob
 import unittest
@@ -21,10 +22,15 @@ class Validator(unittest.TestCase):
         managed_directory_path = configuration.getRoot() + "/" + configuration.getManagedDirectoryPath(managed_directory_name)
         self.assertTrue(os.path.isdir(managed_directory_path + "/" + folder_name))
         
-    def assertThatFolderDoesNotExistInManagedDirectory(self, folder_name, managed_directory_name):
+    def assertThatFolderDoesNotExistInValidManagedDirectory(self, folder_name, managed_directory_name):
         configuration = Environment.getEnvironment().configuration()
         managed_directory_path = configuration.getRoot() + "/" + configuration.getManagedDirectoryPath(managed_directory_name)
         self.assertFalse(os.path.isdir(managed_directory_path + "/" + folder_name))
+        
+    def assertThatExceptionIsRaisedInInvalidManagedDirectory(self, folder_name, managed_directory_name):
+        configuration = Environment.getEnvironment().configuration()
+        with self.assertRaises(UndefinedManagedDirectoryNameException):
+            managed_directory_path = configuration.getRoot() + "/" + configuration.getManagedDirectoryPath(managed_directory_name)
         
         
 
@@ -69,13 +75,17 @@ class TestClass(BaseFixture):
     def test_downloadNonExistentVideo(self):
         video_id = "aaaa"
         self.download(video_id)
-        self.assertThatFolderDoesNotExistInManagedDirectory(video_id, "default")
+        self.assertThatFolderDoesNotExistInValidManagedDirectory(video_id, "default")
         
     def test_downloadExistingVideo(self):
         video_id = "WS7kSlv9uKk"
         self.download(video_id)
         self.assertThatFolderExistsInManagedDirectory(video_id, "default")
         
+    def test_downloadFailsIfManagedDirectoryNameDoesNotExist(self):
+        video_id = "WS7kSlv9uKk"
+        self.download(video_id)
+        self.assertThatExceptionIsRaisedInInvalidManagedDirectory(video_id, "aaaaa")
     
 if __name__ == '__main__':
     unittest.main()
