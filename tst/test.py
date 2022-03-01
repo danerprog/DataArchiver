@@ -17,7 +17,7 @@ import unittest
 
 class Validator(unittest.TestCase):
   
-    def assertThatFolderExistsInManagedDirectory(self, folder_name, managed_directory_name):
+    def assertThatFolderNamedUsingVideoIdExistsInManagedDirectory(self, folder_name, managed_directory_name):
         configuration = Environment.getEnvironment().configuration()
         managed_directory_path = configuration.getRoot() + "/" + configuration.getManagedDirectoryPath(managed_directory_name)
         self.assertTrue(os.path.isdir(managed_directory_path + "/" + folder_name))
@@ -31,6 +31,12 @@ class Validator(unittest.TestCase):
         configuration = Environment.getEnvironment().configuration()
         with self.assertRaises(UndefinedManagedDirectoryNameException):
             managed_directory_path = configuration.getRoot() + "/" + configuration.getManagedDirectoryPath(managed_directory_name)
+            
+    def assertThatSubdirectoriesDoNotExist(self, folder_name, managed_directory_name, subdirectory_path):
+        configuration = Environment.getEnvironment().configuration()
+        managed_directory_path = configuration.getRoot() + "/" + configuration.getManagedDirectoryPath(managed_directory_name)
+        self.assertTrue(os.path.isdir(managed_directory_path))
+        self.assertFalse(os.path.isdir(managed_directory_path + "/" + subdirectory_path))
         
         
 
@@ -57,10 +63,10 @@ class BaseFixture(Validator):
     def includeInDownloadRequest(self, video_id):
         self._download_request_file.write(video_id + ",default,\n")
          
-    def download(self, youtube_video_id):
+    def download(self, youtube_video_id, subdirectory=""):
         self._archiver.download({
             "headers" : "video_id, managed_directory_name, subdirectory",
-            "values" : youtube_video_id + ",,"
+            "values" : youtube_video_id + ",," + subdirectory
         })
         
     def _setUpEnvironment(self):
@@ -68,7 +74,6 @@ class BaseFixture(Validator):
             'config_file' : BaseFixture.CONFIGURATION_FILEPATH
         })
         
- 
 
 class TestClass(BaseFixture):
   
@@ -80,12 +85,19 @@ class TestClass(BaseFixture):
     def test_downloadExistingVideo(self):
         video_id = "WS7kSlv9uKk"
         self.download(video_id)
-        self.assertThatFolderExistsInManagedDirectory(video_id, "default")
+        self.assertThatFolderNamedUsingVideoIdExistsInManagedDirectory(video_id, "default")
         
     def test_downloadFailsIfManagedDirectoryNameDoesNotExist(self):
         video_id = "WS7kSlv9uKk"
         self.download(video_id)
         self.assertThatExceptionIsRaisedInInvalidManagedDirectory(video_id, "aaaaa")
+        
+    def test_downloadFailsIfSubdirectoryDoesNotExist(self):
+        video_id = "WS7kSlv9uKk"
+        subdirectory_to_use = "samplesubdirectory"
+        self.download(video_id, subdirectory = subdirectory_to_use)
+        self.assertThatSubdirectoriesDoNotExist(video_id, "default", subdirectory_to_use)
+
     
 if __name__ == '__main__':
     unittest.main()
