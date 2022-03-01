@@ -13,6 +13,7 @@ from environment.Environment import Environment
 from environment.Exceptions import UndefinedManagedDirectoryNameException
 
 import glob
+import shutil
 import unittest
 
 class Validator(unittest.TestCase):
@@ -50,12 +51,14 @@ class BaseFixture(Validator):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._setUpEnvironment()
+        self._cleanWorkingDirectory()
     
     def setUp(self):
         self._archiver = YoutubeArchiver()
         
     def tearDown(self):
         self._archiver = None
+        self._cleanManagedDirectories()
 
     def archiver(self):
         return self._archiver
@@ -73,6 +76,21 @@ class BaseFixture(Validator):
         Environment.setEnvironment({
             'config_file' : BaseFixture.CONFIGURATION_FILEPATH
         })
+        
+    def _cleanManagedDirectories(self):
+        configuration = Environment.getEnvironment().configuration()
+        managed_directory_names = configuration.getManagedDirectoryNames()
+        for managed_directory_name, managed_directory_folder in managed_directory_names:
+            directory_path = configuration.getRoot() + "/" + managed_directory_folder
+            self._cleanDirectory(directory_path)
+
+    def _cleanWorkingDirectory(self):
+        configuration = Environment.getEnvironment().configuration()
+        self._cleanDirectory(configuration.getWorkingDirectory())
+        
+    def _cleanDirectory(self, directory_path):
+        shutil.rmtree(directory_path, ignore_errors = True)
+        os.makedirs(directory_path, exist_ok = True)
         
 
 class TestClass(BaseFixture):

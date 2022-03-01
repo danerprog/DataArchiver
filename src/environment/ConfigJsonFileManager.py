@@ -119,6 +119,9 @@ class ConfigJsonFileManager(object) :
             return self._configuration["managed_directories"][managed_directory_name]
         except KeyError as e:
             raise UndefinedManagedDirectoryNameException(str(e))
+            
+    def getManagedDirectoryNames(self):
+        return self._configuration["managed_directories"].items()
         
     def getWorkingDirectory(self):
         return self._configuration["working_directory"]
