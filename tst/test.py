@@ -39,6 +39,43 @@ class Validator(unittest.TestCase):
         self.assertTrue(os.path.isdir(managed_directory_path))
         self.assertFalse(os.path.isdir(managed_directory_path + "/" + subdirectory_path))
         
+    def assertThatDownloadedFilesExist(self, folder_name, managed_directory_name):
+        configuration = Environment.getEnvironment().configuration()
+        path_to_check = configuration.getRoot() + "/" + configuration.getManagedDirectoryPath(managed_directory_name) + "/" + folder_name
+        file_extensions_to_check = [".description", ".info.json", ".mp4"]
+        
+        for filename in os.listdir(path_to_check):
+            filename_tokens = filename.split(".", maxsplit = 2)
+            extension = filename_tokens[-1]
+            for index in range(len(file_extensions_to_check) - 1, -1, -1):
+                if extension == file_extensions_to_check[index]:
+                    file_extensions_to_check.pop(index)
+                    
+        print("file_extensions_to_check: " + str(file_extensions_to_check))
+        self.assertTrue(len(file_extensions_to_check), 0)
+        
+    def assertThatSubtitleFilesExist(self, folder_name, managed_directory_name, languages):
+        configuration = Environment.getEnvironment().configuration()
+        path_to_check = configuration.getRoot() + "/" + configuration.getManagedDirectoryPath(managed_directory_name) + "/" + folder_name
+        file_extensions_to_check = self._buildSubtitleFileExtensionsToCheck(languages)
+        
+        for filename in os.listdir(path_to_check):
+            filename_tokens = filename.split(".", maxsplit = 2)
+            extension = filename_tokens[-1]
+            for index in range(len(file_extensions_to_check) - 1, -1, -1):
+                if extension == file_extensions_to_check[index]:
+                    file_extensions_to_check.pop(index)
+                    
+        print("file_extensions_to_check: " + str(file_extensions_to_check))
+        self.assertTrue(len(file_extensions_to_check), 0)
+        
+    def _buildSubtitleFileExtensionsToCheck(self, languages):
+        completed_subtitle_file_extensions = []
+        
+        for language in languages:
+            completed_subtitle_file_extensions.append("." + language + ".vtt")
+
+        return completed_subtitle_file_extensions
         
 
 class BaseFixture(Validator):
@@ -104,6 +141,7 @@ class TestClass(BaseFixture):
         video_id = "WS7kSlv9uKk"
         self.download(video_id)
         self.assertThatFolderNamedUsingVideoIdExistsInManagedDirectory(video_id, "default")
+        self.assertThatDownloadedFilesExist(video_id, "default")
         
     def test_downloadFailsIfManagedDirectoryNameDoesNotExist(self):
         video_id = "WS7kSlv9uKk"
@@ -115,6 +153,13 @@ class TestClass(BaseFixture):
         subdirectory_to_use = "samplesubdirectory"
         self.download(video_id, subdirectory = subdirectory_to_use)
         self.assertThatSubdirectoriesDoNotExist(video_id, "default", subdirectory_to_use)
+        
+    def test_downloadVideoWithSubtitles(self):
+        video_id = "0Rbz_PZOZ54"
+        self.download(video_id)
+        self.assertThatDownloadedFilesExist(video_id, "default")
+        self.assertThatSubtitleFilesExist(video_id, "default", ["en-US"])
+        
 
     
 if __name__ == '__main__':
