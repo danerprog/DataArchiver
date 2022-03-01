@@ -14,24 +14,35 @@ from environment.Environment import Environment
 import glob
 import unittest
 
-class BaseFixture(unittest.TestCase):
+class Validator(unittest.TestCase):
+  
+    def assertThatFolderExistsInManagedDirectory(self, folder_name, managed_directory_name):
+        configuration = Environment.getEnvironment().configuration()
+        managed_directory_path = configuration.getRoot() + "/" + configuration.getManagedDirectoryPath(managed_directory_name)
+        self.assertTrue(os.path.isdir(managed_directory_path + "/" + folder_name))
+        
+    def assertThatFolderDoesNotExistInManagedDirectory(self, folder_name, managed_directory_name):
+        configuration = Environment.getEnvironment().configuration()
+        managed_directory_path = configuration.getRoot() + "/" + configuration.getManagedDirectoryPath(managed_directory_name)
+        self.assertFalse(os.path.isdir(managed_directory_path + "/" + folder_name))
+        
+        
+
+class BaseFixture(Validator):
 
     ROOT_TEST_ENVIRONMENT_DIRECTORY = "tst/testenv/"
-    
-    DOWNLOAD_REQUEST_FILENAME = "dr.csv"
-    DOWNLOAD_REQUEST_FILEPATH = ROOT_TEST_ENVIRONMENT_DIRECTORY + DOWNLOAD_REQUEST_FILENAME
     
     CONFIGURATION_FILENAME = "config.json"
     CONFIGURATION_FILEPATH = ROOT_TEST_ENVIRONMENT_DIRECTORY + CONFIGURATION_FILENAME
     
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._setUpEnvironment()
     
     def setUp(self):
-        self._setUpEnvironment()
-        self._setUpDownloadRequestFile()
         self._archiver = YoutubeArchiver()
         
     def tearDown(self):
-        self._tearDownDownloadRequestFile()
         self._archiver = None
 
     def archiver(self):
@@ -39,34 +50,31 @@ class BaseFixture(unittest.TestCase):
         
     def includeInDownloadRequest(self, video_id):
         self._download_request_file.write(video_id + ",default,\n")
-        
-    def startDownload(self):
-        self.archiver().download(BaseFixture.DOWNLOAD_REQUEST_FILEPATH)
+         
+    def download(self, youtube_video_id):
+        self._archiver.download({
+            "headers" : "video_id, managed_directory_name, subdirectory",
+            "values" : youtube_video_id + ",,"
+        })
         
     def _setUpEnvironment(self):
         Environment.setEnvironment({
             'config_file' : BaseFixture.CONFIGURATION_FILEPATH
         })
-     
-    def _setUpDownloadRequestFile(self):
-        self._download_request_file = open(BaseFixture.DOWNLOAD_REQUEST_FILEPATH, "w")
-        self._download_request_file.write("video_id, managed_directory_name, subdirectory\n")
         
-    def _tearDownDownloadRequestFile(self):
-        self._download_request_file.close()
-        #os.remove(BaseFixture.DOWNLOAD_REQUEST_FILEPATH)
-  
+ 
 
 class TestClass(BaseFixture):
   
     def test_downloadNonExistentVideo(self):
-        self.includeInDownloadRequest("aaaa")
-        self.startDownload()
-        pass
+        video_id = "aaaa"
+        self.download(video_id)
+        self.assertThatFolderDoesNotExistInManagedDirectory(video_id, "default")
         
     def test_downloadExistingVideo(self):
-        self.includeInDownloadRequest("WS7kSlv9uKk")
-        self.startDownload()
+        video_id = "WS7kSlv9uKk"
+        self.download(video_id)
+        self.assertThatFolderExistsInManagedDirectory(video_id, "default")
         
     
 if __name__ == '__main__':

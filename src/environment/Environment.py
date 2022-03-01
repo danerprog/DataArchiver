@@ -20,7 +20,7 @@ class Environment(object):
         
     def _prepareLoggerEnvironment(self):
         configuration = self.configuration()
-        Logger.DEFAULT_OUTPUT_FILENAME = configuration.getWorkingDirectory() + "\\" + Logger.DEFAULT_OUTPUT_FILENAME
+        Logger.DEFAULT_OUTPUT_FILENAME = configuration.getWorkingDirectory() + "\\log.txt"
         Logger.CURRENT_LOGGING_LEVEL = configuration.getLogPrintingLevel()
         Logger.CURRENT_PRINTING_LEVEL = configuration.getConsolePrintingLevel()
         self._logger = Logger.getLogger("Environment")

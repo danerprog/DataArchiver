@@ -131,8 +131,23 @@ class DownloadRequestListProcessor:
     def _process_failed_download(self, failure_reason):
         failed_download_request = self._current_download_request_for_processing
         failed_download_request["failure_reason"] = failure_reason
+        self._remove_created_directory_for_current_download_request()
         self._failed_download_request_archiver.archiveDownloadRequest(self._current_download_request_for_processing)
         self._reset_current_download_request()
+        
+    def _remove_created_directory_for_current_download_request(self):
+        self._logger.trace("_remove_created_directory_for_current_download_request called")
+        download_request = self._current_download_request_for_processing
+        full_directory = self._configuration.getRoot() + "\\" + self._configuration.getManagedDirectoryPath(self._managed_directory_name) + "\\" + self._current_download_request_for_processing["subdirectory"]
+        directory_path_with_video_id = full_directory + "\\" + download_request['video_id']
+        
+        try:
+            os.rmdir(directory_path_with_video_id)
+            self._logger.info(directory_path_with_video_id + " folder is removed")
+        except OSError:
+            self._logger.info(directory_path_with_video_id + " folder is not empty and cannot be removed")
+        except FileNotFoundError:
+            self._logger.warning("Tried to remove non-existent " + directory_path_with_video_id + " folder")
         
     def _save_download_request_to_file(self, download_request, file_manager):
         file_manager.addDownloadRequest(download_request)

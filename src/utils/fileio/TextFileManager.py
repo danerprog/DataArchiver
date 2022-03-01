@@ -3,6 +3,8 @@ from utils.fileio.TextFile import TextFile
 from datetime import datetime
 from pathlib import Path
 
+import json
+
 class TextFileManager:
 
     TEXT_FILE = {}
@@ -14,7 +16,7 @@ class TextFileManager:
         
     def __del__(self):
         self._removeSelfFromTextFileManagerArray()
-    
+
         if len(TextFileManager.TEXT_FILE[self._filename]['managers']) == 0:
             self.getFile().close()
             self._renameLogFile()
@@ -26,9 +28,9 @@ class TextFileManager:
                 'managers' : [],
                 'time_instantiated' : self._getCurrentTimestampInString()
             }
-
-        TextFileManager.TEXT_FILE[self._filename]['managers'].append(self)
         
+        TextFileManager.TEXT_FILE[self._filename]['managers'].append(self)
+
     def _removeSelfFromTextFileManagerArray(self):
         try:
             index = TextFileManager.TEXT_FILE[self._filename]['managers'].index(self)
