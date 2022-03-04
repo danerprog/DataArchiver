@@ -16,7 +16,8 @@ class DownloadSessionStatus:
             "101" : 0,
             "102" : 0,
             "103" : 0,
-            "104" : 0
+            "104" : 0,
+            "105" : 0
         }
         
     def incrementNumberOfSuccessfulDownloads(self, numberToAdd = 1):
@@ -44,6 +45,7 @@ class DownloadSessionStatus:
         self._printReportForFailedDownloadsForErrorIfNeeded("102")
         self._printReportForFailedDownloadsForErrorIfNeeded("103")
         self._printReportForFailedDownloadsForErrorIfNeeded("104")
+        self._printReportForFailedDownloadsForErrorIfNeeded("105")
         self._output_file.writeLine("")
         self._output_file.writeLine("")
         

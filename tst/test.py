@@ -141,7 +141,7 @@ class BaseFixture(Validator):
         os.makedirs(directory_path, exist_ok = True)
         
 
-class TestClass(BaseFixture):
+class TestClass(BaseFixture):   
 
     def test_downloadNonExistentVideo(self):
         video_id = "aaaa"
@@ -180,6 +180,11 @@ class TestClass(BaseFixture):
         filename = "1successful1failingdownloadrequest"
         self.downloadFile(filename)
         self.assertThatFileInWorkingDirectoryExists(filename + "_status.txt")
+      
+    def test_downloadFileWithInvalidCharactersInUrl(self):
+        video_id = "https://www.youtube.com/watch?v=WS7kSlv9uKk"
+        self.download(video_id)
+        self.assertThatFolderDoesNotExistInValidManagedDirectory("WS7kSlv9uKk", "default")
         
 
 if __name__ == '__main__':

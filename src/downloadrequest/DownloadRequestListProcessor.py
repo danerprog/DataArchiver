@@ -95,8 +95,14 @@ class DownloadRequestListProcessor:
         full_directory = self._configuration.getRoot() + "\\" + self._configuration.getManagedDirectoryPath(self._managed_directory_name) + "\\" + self._current_download_request_for_processing["subdirectory"]
         
         if self._doesPathExist(full_directory):
-            self._create_needed_directories(full_directory)
-            self._begin_download_for_download_request(full_directory)
+            try:
+                self._create_needed_directories(full_directory)
+                self._begin_download_for_download_request(full_directory)
+            except OSError as e:
+                failure_reason = FailureReason.build105(str(e))
+                self._logger.info(failure_reason)
+                self._process_failed_download(failure_reason)
+                self._download_session_status.incrementNumberOfFailedDownloadsForError("105")
         else:
             failure_reason = FailureReason.build102(full_directory, self._current_download_request_for_processing["url"])
             self._logger.warning(failure_reason)
