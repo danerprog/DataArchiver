@@ -17,7 +17,8 @@ class ConfigJsonFileManager(object) :
         },
         "logger" : {
             "log_printing_level" : "[optional int. if no value is provided then no logs will be printed]",
-            "console_printing_level" : "[optional int. if no value is provided then no logs will be printed]"
+            "console_printing_level" : "[optional int. if no value is provided then no logs will be printed]",
+            "enable_timestamp_per_entry" : "[optional. 'true' if true, any other value or if not provided will be interpreted as 'false']"
         },
         "download" : {
             "rate_limit" : "[optional int. if no value is provided then the default value will be 100000 (100KBps)])",
@@ -77,6 +78,11 @@ class ConfigJsonFileManager(object) :
                 self._configuration["logger"]["console_printing_level"] = ConfigJsonFileManager.DEFAULT_LOGGING_LEVEL
         except (NameError, KeyError) as e:
             self._configuration["logger"]["console_printing_level"] = ConfigJsonFileManager.DEFAULT_LOGGING_LEVEL
+            
+        try:
+            self._configuration["logger"]["enable_timestamp_per_entry"] = self._configuration["logger"]["enable_timestamp_per_entry"] == "true"
+        except ValueError:
+            self._configuration["logger"]["enable_timestamp_per_entry"] = False
           
     def _getDownloadConfigurationValues(self):
         self._configuration["download"] = self._json_dictionary["download"] if "download" in self._json_dictionary else {}
@@ -137,6 +143,9 @@ class ConfigJsonFileManager(object) :
         
     def getNumberOfRetries(self):
         return self._configuration["download"]["number_of_retries"]
+        
+    def shouldLogEntriesBeTimestamped(self):
+        return self._configuration["logger"]["enable_timestamp_per_entry"]
 
     
     

@@ -23,6 +23,7 @@ class Environment(object):
         Logger.DEFAULT_OUTPUT_FILENAME = configuration.getWorkingDirectory() + "\\log.txt"
         Logger.CURRENT_LOGGING_LEVEL = configuration.getLogPrintingLevel()
         Logger.CURRENT_PRINTING_LEVEL = configuration.getConsolePrintingLevel()
+        Logger.IS_TIMESTAMP_ENABLED = configuration.shouldLogEntriesBeTimestamped()
         self._logger = Logger.getLogger("Environment")
       
     def _createWorkingDirectory(self) :
