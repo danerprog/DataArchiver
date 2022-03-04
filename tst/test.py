@@ -69,6 +69,12 @@ class Validator(unittest.TestCase):
         print("file_extensions_to_check: " + str(file_extensions_to_check))
         self.assertTrue(len(file_extensions_to_check), 0)
         
+    def assertThatFileInWorkingDirectoryExists(self, filename):
+        configuration = Environment.getEnvironment().configuration()
+        path_to_check = configuration.getWorkingDirectory() + "/" + filename
+        print("path_to_check: " + str(path_to_check))
+        self.assertTrue(os.path.isfile(path_to_check))
+        
     def _buildSubtitleFileExtensionsToCheck(self, languages):
         completed_subtitle_file_extensions = []
         
@@ -109,6 +115,11 @@ class BaseFixture(Validator):
             "values" : youtube_video_id + ",," + subdirectory
         })
         
+    def downloadFile(self, filename):
+        self._archiver.download({
+            "filename" : BaseFixture.ROOT_TEST_ENVIRONMENT_DIRECTORY + filename + ".csv"
+        })
+        
     def _setUpEnvironment(self):
         Environment.setEnvironment({
             'config_file' : BaseFixture.CONFIGURATION_FILEPATH
@@ -131,7 +142,7 @@ class BaseFixture(Validator):
         
 
 class TestClass(BaseFixture):
-  
+
     def test_downloadNonExistentVideo(self):
         video_id = "aaaa"
         self.download(video_id)
@@ -160,8 +171,17 @@ class TestClass(BaseFixture):
         self.assertThatDownloadedFilesExist(video_id, "default")
         self.assertThatSubtitleFilesExist(video_id, "default", ["en-US"])
         
+    def test_downloadVideoWithCommnets(self):
+        video_id = "ZMndxzfj5Js"
+        self.download(video_id)
+        self.assertThatDownloadedFilesExist(video_id, "default")
 
-    
+    def test_downloadingFileWillGenerateDownloadStatus(self):
+        filename = "1successful1failingdownloadrequest"
+        self.downloadFile(filename)
+        self.assertThatFileInWorkingDirectoryExists(filename + "_status.txt")
+        
+
 if __name__ == '__main__':
     unittest.main()
     

@@ -7,9 +7,9 @@ from pathlib import Path
 
 class DownloadRequestCsvFileManager(object):
 
-    def __init__(self, filename):
-        self._logger = Logger.getLogger("DownloadRequestCsvFileManager - " + filename)
-        self._filename = filename
+    def __init__(self, full_file_path):
+        self._logger = Logger.getLogger("DownloadRequestCsvFileManager - " + full_file_path)
+        self._full_file_path = full_file_path
         self._createAndOpenFile()
         
         self._csv_keys = []
@@ -29,12 +29,12 @@ class DownloadRequestCsvFileManager(object):
     def _createAndOpenFile(self):
         self._logger.trace("_createAndOpenFile() called")
         self._createNewCsvFileIfItDoesNotExist()
-        self._csv_file = TextFile(self._filename, "r+")
+        self._csv_file = TextFile(self._full_file_path, "r+")
        
     def _createNewCsvFileIfItDoesNotExist(self):
-        path = Path(self._filename)
+        path = Path(self._full_file_path)
         if not path.is_file():
-            self._csv_file = TextFile(self._filename, "a")
+            self._csv_file = TextFile(self._full_file_path, "a")
             self._writeDownloadRequestKeys()
         
     def getAcceptableDownloadRequests(self):
@@ -61,9 +61,9 @@ class DownloadRequestCsvFileManager(object):
                 acceptable_download_requests.append(download_request)
             
         return acceptable_download_requests
-            
-    def getFilename(self):
-        return self._filename
+    
+    def getFullFilepath(self):
+        return self._full_file_path
         
     def addDownloadRequest(self, download_request_dictionary):
         self._logger.debug("addDownloadRequest() called. download_request_dictionary: " + str(download_request_dictionary))
@@ -87,7 +87,7 @@ class DownloadRequestCsvFileManager(object):
         
     def _writeAdditionalDownloadRequestKeys(self):
         pass
-        
+
         
 class FailedDownloadRequestCsvFileManager(DownloadRequestCsvFileManager):
     

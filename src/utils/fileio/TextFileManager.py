@@ -19,14 +19,13 @@ class TextFileManager:
 
         if len(TextFileManager.TEXT_FILE[self._filename]['managers']) == 0:
             self.getFile().close()
-            self._renameLogFile()
+            self._triggerObjectDeletionProcedures()
             
     def _appendSelfToFilenameManagers(self):
         if self._filename not in TextFileManager.TEXT_FILE:
             TextFileManager.TEXT_FILE[self._filename] = {
                 'file' : TextFile(self._filename, self._mode),
-                'managers' : [],
-                'time_instantiated' : self._getCurrentTimestampInString()
+                'managers' : []
             }
         
         TextFileManager.TEXT_FILE[self._filename]['managers'].append(self)
@@ -37,11 +36,31 @@ class TextFileManager:
             TextFileManager.TEXT_FILE[self._filename]['managers'].pop(index)
         except ValueError as e:
             pass
+            
+    def _triggerObjectDeletionProcedures(self):
+        pass
+    
+    def getFile(self):
+        return TextFileManager.TEXT_FILE[self._filename]['file']
+       
+       
+class TimestampedTextFileManager(TextFileManager):
+    
+    def __init__(self, filename, mode):
+        super().__init__(filename, mode)
+        self._appendTimeInstantiatedToFilenameManagerIfNeeded()
         
+    def _appendTimeInstantiatedToFilenameManagerIfNeeded(self):
+        if self._filename in TextFileManager.TEXT_FILE and 'time_instantiated' not in TextFileManager.TEXT_FILE[self._filename]:
+            TextFileManager.TEXT_FILE[self._filename]['time_instantiated'] = self._getCurrentTimestampInString()
+    
     def _getCurrentTimestampInString(self):
         timestamp = datetime.now()
         seconds = timestamp.hour * 3600 + timestamp.minute * 60 + timestamp.second
         return timestamp.strftime("%Y-%m-%d-" + str(seconds))
+        
+    def _getFileExtension(self):
+        return self._filename.split(".")[-1]
         
     def _renameLogFile(self):
         fileExtension = "." + self._getFileExtension()
@@ -49,8 +68,6 @@ class TextFileManager:
         newFilename = self._filename.replace(fileExtension, "_" + timeInstantiated + fileExtension)
         Path(self._filename).rename(newFilename)
         
-    def _getFileExtension(self):
-        return self._filename.split(".")[-1]
+    def _triggerObjectDeletionProcedures(self):
+        self._renameLogFile()
         
-    def getFile(self):
-        return TextFileManager.TEXT_FILE[self._filename]['file']

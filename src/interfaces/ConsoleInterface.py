@@ -43,9 +43,6 @@ class ConsoleInterface:
         options, arguments = self._extractOptionsAndArguments(options_string, ["filename=", "headers=", "values="])
         
         for option, value in options:
-            print(option)
-            print(value)
-            print()
             if option == "--filename":
                 if headers is None and values is None:
                     numberOfDownloadRequestsFound = self._youtubeArchiver.download({

@@ -1,4 +1,6 @@
 from downloadrequest.DownloadRequestCsvFileManager import DownloadRequestCsvFileManager
+from downloadrequest.DownloadSessionStatus import DownloadSessionStatus
+from downloadrequest.FailureReason import FailureReason
 from environment.Environment import Environment
 from environment.Exceptions import UndefinedManagedDirectoryNameException
 from utils.Logger import Logger
@@ -20,10 +22,12 @@ class DownloadRequestListProcessor:
         self._managed_directory_name = args['managed_directory_name']
         self._download_request_list = args['download_request_list']
         self._download_request_filename = args['download_request_filename'].replace(".", "_unprocessed.")
+        self._download_session_status = DownloadSessionStatus(args['download_request_filename'], args['managed_directory_name'])
         self._reset_current_download_request()
         
     def __del__(self):
         self._logger.trace("__del__ called")
+        self._download_session_status.generateStatusReport()
         self.save_unprocessed_download_requests_to_file()
    
     def _success_hook(self, args):
@@ -39,6 +43,7 @@ class DownloadRequestListProcessor:
                     download_request = self._get_current_download_request_with_important_info(args['info_dict'])
                     self._logger.debug("Archived download request: " + str(download_request))
                     self._successful_download_request_archiver.archiveDownloadRequest(download_request)
+                    self._download_session_status.incrementNumberOfSuccessfulDownloads()
                     
                 self._reset_current_download_request()
             else:
@@ -46,12 +51,13 @@ class DownloadRequestListProcessor:
                 
     def _failed_hook(self, args):
         if args['status'] == "error":
-            failure_reason = "Download failed. args['filename']: " + args['filename']
+            failure_reason = FailureReason.build101(args['filename'])
             self._logger.info(failure_reason)
             
             if args['info_dict']['ext'] == 'mp4':
-                self._logger.trace("archiving and reseting download request.")
+                self._logger.trace("archiving and resetting download request.")
                 self._process_failed_download(failure_reason)
+                self._download_session_status.incrementNumberOfFailedDownloadsForError("101")
             else:
                 self._logger.trace("skipping archiving process.")  
       
@@ -92,20 +98,24 @@ class DownloadRequestListProcessor:
             self._create_needed_directories(full_directory)
             self._begin_download_for_download_request(full_directory)
         else:
-            failure_reason = "Path does not exist. Stopping download. full_directory: " + full_directory + ", download_url: " + self._current_download_request_for_processing["url"]
+            failure_reason = FailureReason.build102(full_directory, self._current_download_request_for_processing["url"])
             self._logger.warning(failure_reason)
             self._process_failed_download(failure_reason)
+            self._download_session_status.incrementNumberOfFailedDownloadsForError("102")
             
     def _try_to_process_download_request(self):
         try:
             self._process_download_request()
         except yt_dlp.utils.DownloadError as e:
-            failure_reason = str(e).replace("\n", ". ")
-            self._logger.info("DownloadError caught. failure_reason: " + failure_reason)
+            failure_reason = FailureReason.build103(str(e).replace("\n", ". "))
+            self._logger.info(failure_reason)
             self._process_failed_download(failure_reason)
+            self._download_session_status.incrementNumberOfFailedDownloadsForError("103")
         except UndefinedManagedDirectoryNameException as e:
-            message = "UndefinedManagedDirectoryNameException caught. managed_directory_name: " + str(e)
-            self._logger.info(message)
+            failure_reason = FailureReason.build104(str(e))
+            self._logger.info(failure_reason)
+            self._process_failed_download(failure_reason)
+            self._download_session_status.incrementNumberOfFailedDownloadsForError("104")
             
     def _doesPathExist(self, directory):
         return Path(directory).is_dir()

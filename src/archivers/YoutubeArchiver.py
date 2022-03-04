@@ -14,7 +14,7 @@ class YoutubeArchiver(object):
         self._logger = Logger.getLogger("YoutubeArchiver")
         self._download_request_list_processors = []
         
-    def _create_download_request_list_processors(self, download_request_file, download_requests):
+    def _create_download_request_list_processors(self, download_request_filename, download_requests):
         self._logger.trace("_create_download_request_list_processors called")
         for (managed_directory_name, download_request_list) in download_requests.items():
             args = {
@@ -22,7 +22,7 @@ class YoutubeArchiver(object):
                 'failed_download_request_archiver' : FailedDownloadRequestArchiver("failed_downloads"),
                 'managed_directory_name' : managed_directory_name,
                 'download_request_list' : download_request_list,
-                'download_request_filename' : download_request_file
+                'download_request_filename' : self._extractFilenameFromFilepath(download_request_filename)
             }
             self._download_request_list_processors.append(DownloadRequestListProcessor(args))
             
@@ -55,6 +55,13 @@ class YoutubeArchiver(object):
         self._create_download_request_list_processors("header_and_value_request", download_requests)
         self._run_download_request_lists()
         return len(download_requests)
+        
+    def _extractFilenameFromFilepath(self, full_file_path):
+        full_file_path = full_file_path.replace("\\", "/")
+        last_slash_character_index = full_file_path.rfind("/")
+        last_dot_character_index = full_file_path.rfind(".")
+        filename = full_file_path[last_slash_character_index + 1:last_dot_character_index]
+        return filename
     
     def download(self, args):
         self._logger.trace("download called")

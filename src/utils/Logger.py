@@ -1,4 +1,4 @@
-from utils.fileio.TextFileManager import TextFileManager
+from utils.fileio.TextFileManager import TimestampedTextFileManager
 
 import colorama
 from datetime import datetime
@@ -39,7 +39,7 @@ class Logger(object):
         self._changeOutputFile()
 
     def _changeOutputFile(self):
-        self._file_manager = TextFileManager(self._outputFilename, "a+")
+        self._file_manager = TimestampedTextFileManager(self._outputFilename, "a+")
         self._output_file = self._file_manager.getFile()
     
     def setOutputFile(self, filename):
