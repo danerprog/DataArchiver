@@ -12,7 +12,9 @@ from archivers.YoutubeArchiver import YoutubeArchiver
 from environment.Environment import Environment
 from environment.Exceptions import UndefinedManagedDirectoryNameException
 
+import gc
 import glob
+from pathlib import Path
 import shutil
 import unittest
 
@@ -71,9 +73,10 @@ class Validator(unittest.TestCase):
         
     def assertThatFileInWorkingDirectoryExists(self, filename):
         configuration = Environment.getEnvironment().configuration()
-        path_to_check = configuration.getWorkingDirectory() + "/" + filename
+        path_to_check = configuration.getWorkingDirectory() + "\\" + filename
+        path_to_check = path_to_check.replace("\\", "/")
         print("path_to_check: " + str(path_to_check))
-        self.assertTrue(os.path.isfile(path_to_check))
+        self.assertTrue(Path(path_to_check).is_file())
         
     def _buildSubtitleFileExtensionsToCheck(self, languages):
         completed_subtitle_file_extensions = []
@@ -100,8 +103,12 @@ class BaseFixture(Validator):
         self._archiver = YoutubeArchiver()
         
     def tearDown(self):
-        self._archiver = None
+        self.deleteYoutubeArchiver()
         self._cleanManagedDirectories()
+        
+    def deleteYoutubeArchiver(self):
+        self._archiver = None
+        gc.collect()
 
     def archiver(self):
         return self._archiver
@@ -176,10 +183,11 @@ class TestClass(BaseFixture):
         self.download(video_id)
         self.assertThatDownloadedFilesExist(video_id, "default")
 
-    def test_downloadingFileWillGenerateDownloadStatus(self):
+    def test_downloadingFileWillGenerateDownloadStatusAndUnprocessedDownloadRequestFile(self):
         filename = "1successful1failingdownloadrequest"
         self.downloadFile(filename)
         self.assertThatFileInWorkingDirectoryExists(filename + "_status.txt")
+        self.assertThatFileInWorkingDirectoryExists(filename + "_unprocessed.csv")
       
     def test_downloadFileWithInvalidCharactersInUrl(self):
         video_id = "https://www.youtube.com/watch?v=WS7kSlv9uKk"

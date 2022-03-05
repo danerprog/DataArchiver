@@ -21,7 +21,7 @@ class DownloadRequestListProcessor:
         self._failed_download_request_archiver = args['failed_download_request_archiver']
         self._managed_directory_name = args['managed_directory_name']
         self._download_request_list = args['download_request_list']
-        self._download_request_filename = args['download_request_filename'].replace(".", "_unprocessed.")
+        self._download_request_filename = args['download_request_filename'] + "_unprocessed.csv"
         self._download_session_status = DownloadSessionStatus(args['download_request_filename'], args['managed_directory_name'])
         self._reset_current_download_request()
         
@@ -198,7 +198,8 @@ class DownloadRequestListProcessor:
             
     def save_unprocessed_download_requests_to_file(self):
         self._logger.trace("save_unprocessed_download_requests_to_file called")
-        download_request_csv_file_manager = DownloadRequestCsvFileManager(self._download_request_filename)
+        configuration = Environment.getEnvironment().configuration()
+        download_request_csv_file_manager = DownloadRequestCsvFileManager(configuration.getWorkingDirectory() + "\\" + self._download_request_filename)
         
         if self._current_download_request_for_processing is not None:
             self._save_download_request_to_file(self._current_download_request_for_processing, download_request_csv_file_manager)
