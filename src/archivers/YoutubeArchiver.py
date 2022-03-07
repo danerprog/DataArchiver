@@ -60,7 +60,10 @@ class YoutubeArchiver(object):
         full_file_path = full_file_path.replace("\\", "/")
         last_slash_character_index = full_file_path.rfind("/")
         last_dot_character_index = full_file_path.rfind(".")
-        filename = full_file_path[last_slash_character_index + 1:last_dot_character_index]
+        if last_dot_character_index > -1:
+            filename = full_file_path[last_slash_character_index + 1:last_dot_character_index]
+        else:
+            filename = full_file_path[last_slash_character_index + 1:]
         return filename
     
     def download(self, args):

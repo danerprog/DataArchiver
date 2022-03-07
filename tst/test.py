@@ -154,30 +154,30 @@ class TestClass(BaseFixture):
         video_id = "aaaa"
         self.download(video_id)
         self.assertThatFolderDoesNotExistInValidManagedDirectory(video_id, "default")
-        
+
     def test_downloadExistingVideo(self):
         video_id = "WS7kSlv9uKk"
         self.download(video_id)
         self.assertThatFolderNamedUsingVideoIdExistsInManagedDirectory(video_id, "default")
         self.assertThatDownloadedFilesExist(video_id, "default")
-        
+
     def test_downloadFailsIfManagedDirectoryNameDoesNotExist(self):
         video_id = "WS7kSlv9uKk"
         self.download(video_id)
         self.assertThatExceptionIsRaisedInInvalidManagedDirectory(video_id, "aaaaa")
-        
+
     def test_downloadFailsIfSubdirectoryDoesNotExist(self):
         video_id = "WS7kSlv9uKk"
         subdirectory_to_use = "samplesubdirectory"
         self.download(video_id, subdirectory = subdirectory_to_use)
         self.assertThatSubdirectoriesDoNotExist(video_id, "default", subdirectory_to_use)
-        
+
     def test_downloadVideoWithSubtitles(self):
         video_id = "0Rbz_PZOZ54"
         self.download(video_id)
         self.assertThatDownloadedFilesExist(video_id, "default")
         self.assertThatSubtitleFilesExist(video_id, "default", ["en-US"])
-        
+
     def test_downloadVideoWithCommnets(self):
         video_id = "ZMndxzfj5Js"
         self.download(video_id)
@@ -187,12 +187,16 @@ class TestClass(BaseFixture):
         filename = "1successful1failingdownloadrequest"
         self.downloadFile(filename)
         self.assertThatFileInWorkingDirectoryExists(filename + "_status.txt")
+        
+        self.deleteYoutubeArchiver()
         self.assertThatFileInWorkingDirectoryExists(filename + "_unprocessed.csv")
-      
+
     def test_downloadFileWithInvalidCharactersInUrl(self):
         video_id = "https://www.youtube.com/watch?v=WS7kSlv9uKk"
         self.download(video_id)
         self.assertThatFolderDoesNotExistInValidManagedDirectory("WS7kSlv9uKk", "default")
+
+
         
 
 if __name__ == '__main__':
