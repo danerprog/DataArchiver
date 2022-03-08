@@ -1,5 +1,4 @@
-
-class File(object):
+class File:
     
     def __init__(self, filename, mode="r+") :
         self._openedFile = open(filename, mode)
@@ -16,6 +15,3 @@ class File(object):
         
     def close(self) :
         self._openedFile.close()
-        
-    def __del__(self) :
-        self.close()

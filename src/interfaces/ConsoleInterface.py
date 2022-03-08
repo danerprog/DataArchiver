@@ -28,7 +28,7 @@ class ConsoleInterface:
         return options, arguments
 
     def _displayMenu(self) :
-        print("################## Data Archiver - Alpha v1.1.5 #################")
+        print("################## Data Archiver - Alpha v1.2.11 #################")
         print("Automatically archives and manages your scraped data")
         print()
         print("########################### Archivers ###########################")
@@ -37,7 +37,7 @@ class ConsoleInterface:
         print()
         print()
         
-    def _runYoutubeArchiver(self, option_value_pairs):
+    def runYoutubeArchiver(self, option_value_pairs):
         print()
         print(">>>>>> Running Youtube Archiver...")
         numberOfDownloadRequestsFound = self._youtube_archiver.run(option_value_pairs)
@@ -46,7 +46,7 @@ class ConsoleInterface:
         
     def runApprorpiateArchiver(self, option_value_pairs):
         if "youtube_archiver" in option_value_pairs:
-            self._runYoutubeArchiver(option_value_pairs)
+            self.runYoutubeArchiver(option_value_pairs)
         else:
             print("No appropriate archiver found.")
   

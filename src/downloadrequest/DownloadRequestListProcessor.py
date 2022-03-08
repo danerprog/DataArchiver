@@ -4,13 +4,15 @@ from downloadrequest.FailureReason import FailureReason
 from environment.Environment import Environment
 from environment.Exceptions import UndefinedManagedDirectoryNameException
 from utils.Logger import Logger
+from utils.resourcemanagement.Cleanable import Cleanable
+from utils.resourcemanagement.Cleaner import Cleaner
 
 import os
 from pathlib import Path
 import yt_dlp
 
 
-class DownloadRequestListProcessor:
+class DownloadRequestListProcessor(Cleanable):
     
     TEMPLATE_FILENAME = "%(title)s.%(ext)s"
     
@@ -24,12 +26,8 @@ class DownloadRequestListProcessor:
         self._download_request_filename = args['download_request_filename'] + "_unprocessed.csv"
         self._download_session_status = DownloadSessionStatus(args['download_request_filename'], args['managed_directory_name'])
         self._reset_current_download_request()
-        
-    def __del__(self):
-        self._logger.trace("__del__ called")
-        self._download_session_status.generateStatusReport()
-        self.save_unprocessed_download_requests_to_file()
-   
+        Cleaner.getCleaner().register(self)
+
     def _success_hook(self, args):
         if args['status'] == 'finished':
             self._logger.info("Download finished. args['filename']: " + args['filename'])
@@ -211,5 +209,10 @@ class DownloadRequestListProcessor:
         
         while len(self._download_request_list) > 0:
             self._save_download_request_to_file(self._download_request_list.pop(0), download_request_csv_file_manager)
+            
+    def clean(self):
+        self._logger.trace("clean called")
+        self._download_session_status.generateStatusReport()
+        self.save_unprocessed_download_requests_to_file()
             
     

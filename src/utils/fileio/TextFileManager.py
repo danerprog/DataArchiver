@@ -1,11 +1,13 @@
 from utils.fileio.TextFile import TextFile
+from utils.resourcemanagement.Cleanable import Cleanable
+from utils.resourcemanagement.Cleaner import Cleaner
 
 from datetime import datetime
 from pathlib import Path
 
 import json
 
-class TextFileManager:
+class TextFileManager(Cleanable):
 
     TEXT_FILE = {}
     
@@ -13,14 +15,8 @@ class TextFileManager:
         self._filename = filename
         self._mode = mode
         self._appendSelfToFilenameManagers()
-        
-    def __del__(self):
-        self._removeSelfFromTextFileManagerArray()
-
-        if len(TextFileManager.TEXT_FILE[self._filename]['managers']) == 0:
-            self.getFile().close()
-            self._triggerObjectDeletionProcedures()
-            
+        Cleaner.getCleaner().register(self)
+    
     def _appendSelfToFilenameManagers(self):
         if self._filename not in TextFileManager.TEXT_FILE:
             TextFileManager.TEXT_FILE[self._filename] = {
@@ -42,6 +38,13 @@ class TextFileManager:
     
     def getFile(self):
         return TextFileManager.TEXT_FILE[self._filename]['file']
+        
+    def clean(self):
+        self._removeSelfFromTextFileManagerArray()
+
+        if len(TextFileManager.TEXT_FILE[self._filename]['managers']) == 0:
+            self.getFile().close()
+            self._triggerObjectDeletionProcedures()
        
        
 class TimestampedTextFileManager(TextFileManager):

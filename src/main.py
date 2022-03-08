@@ -1,5 +1,6 @@
 from interfaces.ConsoleInterface import ConsoleInterface
 from environment.Environment import Environment
+from utils.resourcemanagement.Cleaner import Cleaner
 
 import getopt
 import sys
@@ -26,6 +27,13 @@ def runAppropriateArchiverWithInterface(option_value_pairs, interface):
     else:
         interface.start()
         
+def run():
+    try:
+        runAppropriateArchiverWithInterface(option_value_pairs, ConsoleInterface())
+    except KeyboardInterrupt:
+        pass
+        
+    Cleaner.getCleaner().clean()
 
 if __name__ == "__main__" :
     options, arguments = getopt.getopt((sys.argv[1:]),"",[
@@ -40,5 +48,5 @@ if __name__ == "__main__" :
     
     option_value_pairs = extractOptionAndValuePairs(options)
     setConfigFile(option_value_pairs)
-    runAppropriateArchiverWithInterface(option_value_pairs, ConsoleInterface())
-  
+    run()
+    
