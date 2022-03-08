@@ -81,7 +81,7 @@ class ConfigJsonFileManager(object) :
             
         try:
             self._configuration["logger"]["enable_timestamp_per_entry"] = self._configuration["logger"]["enable_timestamp_per_entry"] == "true"
-        except ValueError:
+        except KeyError:
             self._configuration["logger"]["enable_timestamp_per_entry"] = False
           
     def _getDownloadConfigurationValues(self):

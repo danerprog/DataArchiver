@@ -147,7 +147,12 @@ class DownloadRequestListProcessor:
     def _process_failed_download(self, failure_reason):
         failed_download_request = self._current_download_request_for_processing
         failed_download_request["failure_reason"] = failure_reason
-        self._remove_created_directory_for_current_download_request()
+        
+        try: 
+            self._remove_created_directory_for_current_download_request()
+        except UndefinedManagedDirectoryNameException as e:
+            self._logger.info("UndefinedManagedDirectoryNameException exception caught.")
+            
         self._failed_download_request_archiver.archiveDownloadRequest(self._current_download_request_for_processing)
         self._reset_current_download_request()
         

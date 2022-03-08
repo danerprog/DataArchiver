@@ -66,13 +66,13 @@ class YoutubeArchiver(object):
             filename = full_file_path[last_slash_character_index + 1:]
         return filename
     
-    def download(self, args):
-        self._logger.trace("download called")
+    def run(self, option_value_pairs):
+        self._logger.trace("run called")
         number_of_download_requests = 0
-        if "filename" in args:
-            number_of_download_requests = self._downloadUsingFilename(args["filename"])
-        elif "headers" in args and "values" in args:
-            number_of_download_requests = self._downloadUsingHeadersAndValues(args["headers"], args["values"])
+        if "filename" in option_value_pairs:
+            number_of_download_requests = self._downloadUsingFilename(option_value_pairs["filename"])
+        elif "headers" in option_value_pairs and "values" in option_value_pairs:
+            number_of_download_requests = self._downloadUsingHeadersAndValues(option_value_pairs["headers"], option_value_pairs["values"])
 
         return number_of_download_requests
         
